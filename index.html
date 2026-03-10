@@ -48,6 +48,7 @@
     display: block;
     transition: transform 0.35s ease;
     filter: var(--card-shadow);
+    border-radius: 3.5%;
   }
 
   .card-link:hover img {
@@ -163,6 +164,7 @@ body {
     object-fit: contain;
     display: block;
     filter: var(--card-shadow);
+    border-radius: 3.5%;
   }
 
   .card-container .card-link-bg {
@@ -276,6 +278,7 @@ body {
     object-fit: contain;
     display: block;
     pointer-events: none;
+    border-radius: 3.5%;
   }
 
   .lightbox-btn {
@@ -369,6 +372,100 @@ body {
     .lightbox-arrow-left { left: calc((50% - 47.5vh * 1200/1665) / 4 * 3 - 20px); }
     .lightbox-arrow-right { right: calc((50% - 47.5vh * 1200/1665) / 4 * 3 - 20px); }
   }
+
+  @media (max-width: 1200px) and (orientation: landscape) {
+    .card-link, .card-container {
+      flex: 0 0 100vh;
+      scroll-snap-align: center;
+    }
+    .card-link img, .card-container img {
+      max-height: calc(100vh - 40px);
+      max-width: 70vw;
+    }
+    .mobile-arrows {
+      display: none !important;
+    }
+  }
+
+  /* Mobile zoom overlay */
+  .mobile-zoom-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.92);
+    z-index: 2000;
+    touch-action: pan-x pan-y pinch-zoom;
+    overflow: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .mobile-zoom-overlay.active {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .mobile-zoom-container {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    touch-action: pan-x pan-y pinch-zoom;
+  }
+
+  .mobile-zoom-overlay img {
+    display: block;
+    max-width: 100vw;
+    max-height: 100vh;
+    object-fit: contain;
+    transition: transform 0.3s ease;
+    transform-origin: center center;
+  }
+
+  .mobile-zoom-overlay img.zoomed {
+    max-width: none;
+    max-height: none;
+    width: 90vw;
+    cursor: zoom-out;
+  }
+
+  .mobile-zoom-close {
+    position: fixed;
+    top: 12px;
+    right: 16px;
+    z-index: 2001;
+    background: rgba(0, 0, 0, 0.5);
+    border: none;
+    color: white;
+    font-size: 32px;
+    line-height: 1;
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+  }
+
+  .mobile-zoom-hint {
+    position: fixed;
+    bottom: 20px;
+    left: 0;
+    right: 0;
+    text-align: center;
+    color: rgba(255, 255, 255, 0.6);
+    font-size: 13px;
+    font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+    pointer-events: none;
+    transition: opacity 0.5s ease;
+  }
+
 </style>
 </head>
 <body>
@@ -421,6 +518,14 @@ body {
     <a class="lightbox-btn lb-card6-contact" href="mailto:betesparfaites@protonmail.com">Contact</a>
   </div>
   <button class="lightbox-arrow lightbox-arrow-right" id="lightbox-next">&#8250;</button>
+</div>
+
+
+<div class="mobile-zoom-overlay" id="mobile-zoom">
+  <button class="mobile-zoom-close" id="mobile-zoom-close">&times;</button>
+  <div class="mobile-zoom-container" id="mobile-zoom-container">
+    <img id="mobile-zoom-img" src="" alt="Zoom">
+  </div>
 </div>
 
 <script>
@@ -571,6 +676,69 @@ body {
     img.addEventListener('load', alignButtons);
     if (img.complete) alignButtons();
   });
+
+
+  // Mobile zoom viewer
+  const mobileZoom = document.getElementById('mobile-zoom');
+  const mobileZoomImg = document.getElementById('mobile-zoom-img');
+  const mobileZoomClose = document.getElementById('mobile-zoom-close');
+  const mobileZoomContainer = document.getElementById('mobile-zoom-container');
+
+  function openMobileZoom(src) {
+    if (!isMobile()) return;
+    mobileZoomImg.src = src;
+    mobileZoomImg.classList.remove('zoomed');
+    mobileZoom.classList.add('active');
+    // Add hint
+    let hint = mobileZoom.querySelector('.mobile-zoom-hint');
+    if (!hint) {
+      hint = document.createElement('div');
+      hint.className = 'mobile-zoom-hint';
+      hint.textContent = 'Tap image to zoom · Pinch to adjust';
+      mobileZoom.appendChild(hint);
+    }
+    hint.style.opacity = '1';
+    setTimeout(() => { hint.style.opacity = '0'; }, 2500);
+  }
+
+  function closeMobileZoom() {
+    mobileZoom.classList.remove('active');
+    mobileZoomImg.classList.remove('zoomed');
+    mobileZoomImg.src = '';
+  }
+
+  // Tap image to toggle zoom
+  mobileZoomImg.addEventListener('click', (e) => {
+    e.stopPropagation();
+    mobileZoomImg.classList.toggle('zoomed');
+    if (!mobileZoomImg.classList.contains('zoomed')) {
+      mobileZoomContainer.scrollTo({ top: 0, left: 0 });
+    }
+  });
+
+  // Close button
+  mobileZoomClose.addEventListener('click', (e) => {
+    e.stopPropagation();
+    closeMobileZoom();
+  });
+
+  // Tap outside image to close
+  mobileZoomContainer.addEventListener('click', (e) => {
+    if (e.target === mobileZoomContainer) {
+      closeMobileZoom();
+    }
+  });
+
+  // Open zoom on card tap (mobile only, skip button areas)
+  cards.forEach((card) => {
+    card.el.addEventListener('click', (e) => {
+      if (!isMobile()) return;
+      if (e.target.closest('.tickets-btn')) return;
+      const img = card.el.querySelector('img');
+      if (img) openMobileZoom(img.src);
+    });
+  });
+
 </script>
 </body>
 </html>
