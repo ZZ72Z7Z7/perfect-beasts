@@ -466,16 +466,34 @@ body {
     transition: opacity 0.5s ease;
   }
 
+
+  @media (max-width: 1200px) {
+    picture source { display: block; }
+    picture img {
+      width: auto;
+      max-width: 95vw;
+      height: auto;
+      max-height: calc(100vh - 80px);
+      display: block;
+      border-radius: 3.5%;
+    }
+  }
 </style>
 </head>
 <body>
 <div class="card-grid">
   <div class="card-link">
-    <img src="images/card-01.jpg" alt="Perfect Beasts" width="1200" height="1665">
+    <picture>
+      <source media="(max-width: 1200px)" srcset="images/card-01_mobile_01.jpg">
+      <img src="images/card-01.jpg" alt="Perfect Beasts" width="1200" height="1665">
+    </picture>
   </div>
   <div class="card-container">
     <div class="card-link-bg">
-      <img src="images/card-02.jpg" loading="lazy" alt="Modern Bouffon" width="1200" height="1665">
+      <picture>
+        <source media="(max-width: 1200px)" srcset="images/card-02_mobile_01.jpg">
+        <img src="images/card-02.jpg" loading="lazy" alt="Modern Bouffon" width="1200" height="1665">
+      </picture>
       <a class="tickets-btn" href="https://events.humanitix.com/perfect-beasts-show?h=SiM6BMJovS77kORXZSL4397t2JGi-UL91hsHhQG78Pg&amp;t=1773109967777" target="_blank" rel="noopener">Tickets</a>
     </div>
   </div>
@@ -677,7 +695,6 @@ body {
     if (img.complete) alignButtons();
   });
 
-
   // Mobile zoom viewer
   const mobileZoom = document.getElementById('mobile-zoom');
   const mobileZoomImg = document.getElementById('mobile-zoom-img');
@@ -689,12 +706,11 @@ body {
     mobileZoomImg.src = src;
     mobileZoomImg.classList.remove('zoomed');
     mobileZoom.classList.add('active');
-    // Add hint
     let hint = mobileZoom.querySelector('.mobile-zoom-hint');
     if (!hint) {
       hint = document.createElement('div');
       hint.className = 'mobile-zoom-hint';
-      hint.textContent = 'Tap image to zoom · Pinch to adjust';
+      hint.textContent = 'Tap image to zoom \u00b7 Pinch to adjust';
       mobileZoom.appendChild(hint);
     }
     hint.style.opacity = '1';
@@ -707,7 +723,6 @@ body {
     mobileZoomImg.src = '';
   }
 
-  // Tap image to toggle zoom
   mobileZoomImg.addEventListener('click', (e) => {
     e.stopPropagation();
     mobileZoomImg.classList.toggle('zoomed');
@@ -716,20 +731,17 @@ body {
     }
   });
 
-  // Close button
   mobileZoomClose.addEventListener('click', (e) => {
     e.stopPropagation();
     closeMobileZoom();
   });
 
-  // Tap outside image to close
   mobileZoomContainer.addEventListener('click', (e) => {
     if (e.target === mobileZoomContainer) {
       closeMobileZoom();
     }
   });
 
-  // Open zoom on card tap (mobile only, skip button areas)
   cards.forEach((card) => {
     card.el.addEventListener('click', (e) => {
       if (!isMobile()) return;
@@ -738,7 +750,6 @@ body {
       if (img) openMobileZoom(img.src);
     });
   });
-
 </script>
 </body>
 </html>
