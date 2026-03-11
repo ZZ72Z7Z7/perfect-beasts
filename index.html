@@ -339,62 +339,62 @@ body {
     .lightbox-arrow-right { right: calc((50% - 47.5vh * 1200/1665) / 4 * 3 - 20px); }
   }
 
-  @media (max-width: 1200px) and (orientation: landscape) {
-    body {
-      overflow: auto;
-      height: auto;
-    }
-    .card-grid {
-      flex-direction: row;
-      flex-wrap: wrap;
-      overflow-y: auto;
-      overflow-x: hidden;
-      scroll-snap-type: none;
-      padding: 40px;
-      gap: 24px;
-      height: auto;
-      max-width: 1600px;
-    }
-    .card-link {
-      flex: none;
-      width: calc(50% - 12px);
-      height: auto;
-      scroll-snap-align: none;
-      display: block;
-      aspect-ratio: 1200 / 1665;
-      cursor: pointer;
-    }
-    .card-container {
-      flex: none;
-      width: calc(50% - 12px);
-      height: auto;
-      scroll-snap-align: none;
-      display: block;
-      aspect-ratio: 1200 / 1665;
-      cursor: pointer;
-      transition: transform 0.35s ease;
-    }
-    .card-link picture,
-    .card-container picture {
-      display: block;
-      width: 100%;
-      height: 100%;
-    }
-    .card-link img, .card-container img,
-    picture img {
-      width: 100%;
-      height: 100%;
-      max-width: none;
-      max-height: none;
-      object-fit: contain;
-      border-radius: 3.5%;
-    }
-    .card-link:hover img {
-      transform: scale(1.03);
-    }
-    .card-container:hover {
-      transform: scale(1.03);
-    }
+  /* Landscape grid - triggered by JS .landscape-mode class */
+  body.landscape-mode {
+    overflow: auto;
+    height: auto;
+  }
+  body.landscape-mode .card-grid {
+    flex-direction: row;
+    flex-wrap: wrap;
+    overflow-y: auto;
+    overflow-x: hidden;
+    scroll-snap-type: none;
+    padding: 40px;
+    gap: 24px;
+    height: auto;
+    max-width: 1600px;
+  }
+  body.landscape-mode .card-link {
+    flex: none;
+    width: calc(50% - 12px);
+    height: auto;
+    scroll-snap-align: none;
+    display: block;
+    aspect-ratio: 1200 / 1665;
+    cursor: pointer;
+  }
+  body.landscape-mode .card-container {
+    flex: none;
+    width: calc(50% - 12px);
+    height: auto;
+    scroll-snap-align: none;
+    display: block;
+    aspect-ratio: 1200 / 1665;
+    cursor: pointer;
+    transition: transform 0.35s ease;
+  }
+  body.landscape-mode .card-link picture,
+  body.landscape-mode .card-container picture {
+    display: block;
+    width: 100%;
+    height: 100%;
+  }
+  body.landscape-mode .card-link img,
+  body.landscape-mode .card-container img,
+  body.landscape-mode picture img {
+    width: 100%;
+    height: 100%;
+    max-width: none;
+    max-height: none;
+    object-fit: contain;
+    border-radius: 3.5%;
+  }
+  body.landscape-mode .card-link:hover img {
+    transform: scale(1.03);
+  }
+  body.landscape-mode .card-container:hover {
+    transform: scale(1.03);
   }
 
   
@@ -409,30 +409,29 @@ body {
   }
 
 
-  @media (max-width: 1200px) and (orientation: landscape) {
-    .lightbox-overlay {
-      background: rgba(0, 0, 0, 0.85) !important;
-      overflow-y: auto !important;
-      align-items: flex-start !important;
-      padding: 3vh 20vw !important;
-    }
-    .lightbox-inner {
-      height: auto !important;
-      width: 60vw !important;
-      aspect-ratio: auto !important;
-      max-width: none !important;
-      flex-shrink: 0;
-    }
-    .lightbox-overlay img {
-      width: 100% !important;
-      height: auto !important;
-      pointer-events: auto !important;
-      object-fit: contain;
-      border-radius: 3.5%;
-    }
-    .lightbox-arrow {
-      display: none !important;
-    }
+  /* Landscape lightbox - triggered by JS .landscape-mode class */
+  body.landscape-mode .lightbox-overlay {
+    background: rgba(0, 0, 0, 0.85);
+    overflow-y: auto;
+    align-items: flex-start;
+    padding: 3vh 20vw;
+  }
+  body.landscape-mode .lightbox-inner {
+    height: auto;
+    width: 60vw;
+    aspect-ratio: auto;
+    max-width: none;
+    flex-shrink: 0;
+  }
+  body.landscape-mode .lightbox-overlay img {
+    width: 100%;
+    height: auto;
+    pointer-events: auto;
+    object-fit: contain;
+    border-radius: 3.5%;
+  }
+  body.landscape-mode .lightbox-arrow {
+    display: none;
   }
 </style>
 </head>
@@ -574,6 +573,21 @@ body {
 
 
 
+
+  
+  // Detect landscape mode and toggle class
+  function updateOrientation() {
+    if (window.innerWidth <= 1200 && window.innerWidth > window.innerHeight) {
+      document.body.classList.add('landscape-mode');
+    } else {
+      document.body.classList.remove('landscape-mode');
+    }
+  }
+  updateOrientation();
+  window.addEventListener('resize', updateOrientation);
+  window.addEventListener('orientationchange', () => {
+    setTimeout(updateOrientation, 100);
+  });
 
   const grid = document.querySelector('.card-grid');
 
