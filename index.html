@@ -411,17 +411,24 @@ body {
 
   /* Landscape lightbox - triggered by JS .landscape-mode class */
   body.landscape-mode .lightbox-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
     background: rgba(0, 0, 0, 0.85);
-    overflow-y: auto;
-    align-items: flex-start;
-    padding: 3vh 20vw;
+    z-index: 1000;
+    overflow-y: scroll;
+    -webkit-overflow-scrolling: touch;
+  }
+  body.landscape-mode .lightbox-overlay.active {
+    display: block;
   }
   body.landscape-mode .lightbox-inner {
-    height: auto;
     width: 60vw;
+    height: auto;
     aspect-ratio: auto;
     max-width: none;
-    flex-shrink: 0;
+    margin: 3vh auto;
+    position: relative;
   }
   body.landscape-mode .lightbox-overlay img {
     width: 100%;
@@ -429,9 +436,10 @@ body {
     pointer-events: auto;
     object-fit: contain;
     border-radius: 3.5%;
+    display: block;
   }
   body.landscape-mode .lightbox-arrow {
-    display: none;
+    display: none !important;
   }
 </style>
 </head>
