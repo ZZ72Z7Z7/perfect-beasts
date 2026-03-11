@@ -411,26 +411,27 @@ body {
 
   @media (max-width: 1200px) and (orientation: landscape) {
     .lightbox-overlay {
-      background: rgba(0, 0, 0, 0.85);
-      overflow-y: auto;
-      align-items: flex-start;
-      padding: 3vh 15vw;
+      background: rgba(0, 0, 0, 0.85) !important;
+      overflow-y: auto !important;
+      align-items: flex-start !important;
+      padding: 3vh 20vw !important;
     }
     .lightbox-inner {
-      height: auto;
-      width: 70vw;
-      aspect-ratio: auto;
-      max-width: none;
+      height: auto !important;
+      width: 60vw !important;
+      aspect-ratio: auto !important;
+      max-width: none !important;
       flex-shrink: 0;
     }
     .lightbox-overlay img {
-      width: 100%;
-      height: auto;
+      width: 100% !important;
+      height: auto !important;
+      pointer-events: auto !important;
       object-fit: contain;
       border-radius: 3.5%;
     }
     .lightbox-arrow {
-      display: none;
+      display: none !important;
     }
   }
 </style>
