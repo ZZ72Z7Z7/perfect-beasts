@@ -411,9 +411,9 @@ body {
 
   /* Landscape lightbox - triggered by JS .landscape-mode class */
   body.landscape-mode .lightbox-overlay.active {
-    display: flex;
-    justify-content: center;
-    align-items: center;
+    display: block;
+    overflow-y: scroll;
+    -webkit-overflow-scrolling: touch;
     background: rgba(0, 0, 0, 0.85);
   }
   body.landscape-mode .lightbox-inner {
@@ -421,6 +421,8 @@ body {
     width: 60vw;
     aspect-ratio: auto;
     max-width: none;
+    margin: 0 auto;
+    padding: 3vh 0;
   }
   body.landscape-mode .lightbox-overlay img {
     width: 100%;
@@ -537,6 +539,7 @@ body {
       showCard(i);
       overlay.classList.add('active');
       document.body.style.overflow = 'hidden';
+      overlay.scrollTop = 0;
     });
   });
 
