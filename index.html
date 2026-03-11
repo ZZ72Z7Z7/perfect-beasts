@@ -105,7 +105,16 @@
       max-width: 2400px;
       justify-content: center;
     }
-    .card-link {
+    /* First 3 cards: three across */
+    .card-grid > :nth-child(-n+3) {
+      width: calc(33.333% - 16px);
+    }
+    /* Cards 4-7: pairs, wider so only 2 fit per row */
+    .card-grid > :nth-child(n+4):nth-child(-n+7) {
+      width: calc(50% - 12px);
+    }
+    /* Card 8 (workshop): single, centered */
+    .card-grid > :nth-child(n+8) {
       width: calc(33.333% - 16px);
     }
   }
@@ -208,11 +217,7 @@
     }
   }
 
-  @media (min-width: 2001px) {
-    .card-container {
-      width: calc(33.333% - 16px);
-    }
-  }
+  /* card-container 3-across width handled by nth-child above */
 
 
   /* Lightbox */
