@@ -34,6 +34,12 @@
     gap: 24px;
   }
 
+  picture {
+    display: block;
+    width: 100%;
+    height: 100%;
+  }
+
   .card-link {
     display: block;
     width: calc(50% - 12px);
@@ -98,6 +104,10 @@
     }
     .card-link:hover img {
       transform: none;
+    }
+    picture {
+      width: auto;
+      height: auto;
     }
   }
 
@@ -360,29 +370,7 @@
     cursor: pointer;
     transition: transform 0.35s ease;
   }
-  body.landscape-mode .card-link picture,
-  body.landscape-mode .card-container picture {
-    display: block;
-    width: 100%;
-    height: 100%;
-  }
-  body.landscape-mode .card-link img,
-  body.landscape-mode .card-container img,
-  body.landscape-mode picture img {
-    width: 100%;
-    height: 100%;
-    max-width: none;
-    max-height: none;
-    object-fit: contain;
-    border-radius: 3.5%;
-  }
-  body.landscape-mode .card-link picture {
-    display: block;
-    width: 100%;
-    height: 100%;
-  }
-
-  .card-link:hover img {
+  body.landscape-mode .card-link:hover img {
     transform: scale(1.03);
   }
   body.landscape-mode .card-container:hover {
@@ -399,7 +387,6 @@
       border-radius: 3.5%;
     }
   }
-
 
   /* Landscape lightbox - triggered by JS .landscape-mode class */
   body.landscape-mode .lightbox-overlay.active {
@@ -475,7 +462,6 @@
     display: block;
   }
 
-
   @keyframes card-wobble {
     0% { transform: rotateY(0deg); }
     25% { transform: rotateY(4deg); }
@@ -487,7 +473,6 @@
   .card-flip-inner.wobble {
     animation: card-wobble 0.6s ease;
   }
-
 </style>
 </head>
 <body>
@@ -531,7 +516,7 @@
         <source media="(max-width: 1200px) and (max-aspect-ratio: 3/4)" srcset="images/card-06_mobile.jpg">
         <img src="images/card-06.jpg" loading="lazy" alt="Workshop" width="1200" height="1665">
       </picture>
-      <a class="tickets-btn btn-workshop-info" href="https://events.humanitix.com/perfect-beasts-workshop?h=KWJzFsmMzytsI2L-ip8YO90t5slrTo0ZabbFX4dDF9o&amp;t=1773102944347" target="_blank" rel="noopener">Info & Registration</a>
+      <a class="tickets-btn btn-workshop-info" href="https://events.humanitix.com/perfect-beasts-workshop?h=KWJzFsmMzytsI2L-ip8YO90t5slrTo0ZabbFX4dDF9o&amp;t=1773102944347" target="_blank" rel="noopener">Info &amp; Registration</a>
       <a class="tickets-btn btn-workshop-contact" href="mailto:betesparfaites@protonmail.com">Contact</a>
     </div>
   </div>
@@ -542,7 +527,7 @@
   <div class="lightbox-inner">
     <img id="lightbox-img" src="" alt="Lightbox">
     <a class="lightbox-btn lb-card2-tickets" href="https://events.humanitix.com/perfect-beasts-show?h=SiM6BMJovS77kORXZSL4397t2JGi-UL91hsHhQG78Pg&amp;t=1773109967777" target="_blank" rel="noopener">Tickets</a>
-    <a class="lightbox-btn lb-card6-info" href="https://events.humanitix.com/perfect-beasts-workshop?h=KWJzFsmMzytsI2L-ip8YO90t5slrTo0ZabbFX4dDF9o&amp;t=1773102944347" target="_blank" rel="noopener">Info & Registration</a>
+    <a class="lightbox-btn lb-card6-info" href="https://events.humanitix.com/perfect-beasts-workshop?h=KWJzFsmMzytsI2L-ip8YO90t5slrTo0ZabbFX4dDF9o&amp;t=1773102944347" target="_blank" rel="noopener">Info &amp; Registration</a>
     <a class="lightbox-btn lb-card6-contact" href="mailto:betesparfaites@protonmail.com">Contact</a>
   </div>
   <button class="lightbox-arrow lightbox-arrow-right" id="lightbox-next">&#8250;</button>
