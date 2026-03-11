@@ -55,38 +55,7 @@
     transform: scale(1.03);
   }
 
-  /* Mobile arrows - hidden by default */
-  .mobile-arrows {
-    display: none;
-    position: fixed;
-    left: 0;
-    right: 0;
-    z-index: 100;
-    pointer-events: none;
-    text-align: center;
-  }
-
-  .mobile-arrows.top {
-    top: 0;
-  }
-
-  .mobile-arrows.bottom {
-    bottom: 0;
-  }
-
-  .mobile-arrows svg {
-    width: 70px;
-    height: 35px;
-    opacity: 0.525;
-    pointer-events: auto;
-    cursor: pointer;
-    transition: opacity 0.2s ease;
-    display: inline-block;
-  }
-
-  .mobile-arrows svg:hover {
-    opacity: 0.8;
-  }
+  
 
   @media (max-width: 1200px) {
 body {
@@ -130,9 +99,6 @@ body {
     }
     .card-link:hover img {
       transform: none;
-    }
-    .mobile-arrows {
-      display: none;
     }
   }
 
@@ -423,93 +389,10 @@ body {
     .card-container:hover {
       transform: scale(1.03);
     }
-    .mobile-arrows {
-      display: none !important;
-    }
+
   }
 
-  /* Mobile zoom overlay */
-  .mobile-zoom-overlay {
-    display: none;
-    position: fixed;
-    inset: 0;
-    background: rgba(0, 0, 0, 0.92);
-    z-index: 2000;
-    touch-action: pan-x pan-y pinch-zoom;
-    overflow: auto;
-    -webkit-overflow-scrolling: touch;
-  }
-
-  .mobile-zoom-overlay.active {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-
-  .mobile-zoom-container {
-    position: relative;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 100%;
-    height: 100%;
-    overflow: auto;
-    touch-action: pan-x pan-y pinch-zoom;
-  }
-
-  .mobile-zoom-overlay img {
-    display: block;
-    max-width: 100vw;
-    max-height: 100vh;
-    object-fit: contain;
-    transition: transform 0.3s ease;
-    transform-origin: center center;
-  }
-
-  .mobile-zoom-overlay img.zoomed {
-    max-width: none;
-    max-height: none;
-    width: 90vw;
-    cursor: zoom-out;
-  }
-
-  .mobile-zoom-close {
-    position: fixed;
-    top: 12px;
-    right: 16px;
-    z-index: 2001;
-    background: rgba(0, 0, 0, 0.5);
-    border: none;
-    color: white;
-    font-size: 32px;
-    line-height: 1;
-    width: 44px;
-    height: 44px;
-    border-radius: 50%;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    backdrop-filter: blur(4px);
-    -webkit-backdrop-filter: blur(4px);
-  }
-
-  .mobile-zoom-hint {
-    position: fixed;
-    bottom: 20px;
-    left: 0;
-    right: 0;
-    text-align: center;
-    color: rgba(255, 255, 255, 0.6);
-    font-size: 13px;
-    font-family: -apple-system, BlinkMacSystemFont, sans-serif;
-    pointer-events: none;
-    transition: opacity 0.5s ease;
-  }
-
-
-  @media (max-width: 1200px) {
-    picture source { display: block; }
+  
     picture img {
       width: auto;
       max-width: 95vw;
@@ -594,18 +477,6 @@ body {
   </div>
 </div>
 
-<div class="mobile-arrows top" id="arrow-up">
-  <svg viewBox="0 0 48 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" preserveAspectRatio="xMidYMid meet">
-    <polyline points="6 18 24 6 42 18"></polyline>
-  </svg>
-</div>
-
-<div class="mobile-arrows bottom" id="arrow-down">
-  <svg viewBox="0 0 48 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" preserveAspectRatio="xMidYMid meet">
-    <polyline points="6 6 24 18 42 6"></polyline>
-  </svg>
-</div>
-
 <div class="lightbox-overlay" id="lightbox">
   <button class="lightbox-arrow lightbox-arrow-left" id="lightbox-prev">&#8249;</button>
   <div class="lightbox-inner">
@@ -617,13 +488,6 @@ body {
   <button class="lightbox-arrow lightbox-arrow-right" id="lightbox-next">&#8250;</button>
 </div>
 
-
-<div class="mobile-zoom-overlay" id="mobile-zoom">
-  <button class="mobile-zoom-close" id="mobile-zoom-close">&times;</button>
-  <div class="mobile-zoom-container" id="mobile-zoom-container">
-    <img id="mobile-zoom-img" src="" alt="Zoom">
-  </div>
-</div>
 
 <script>
   const overlay = document.getElementById('lightbox');
@@ -670,7 +534,11 @@ body {
       showCard(i);
       overlay.classList.add('active');
       document.body.style.overflow = 'hidden';
-      setTimeout(() => { overlay.scrollTop = 0; }, 50);
+      lightboxImg.addEventListener('load', function scrollReset() {
+        overlay.scrollTop = 0;
+        lightboxImg.removeEventListener('load', scrollReset);
+      }, { once: true });
+      overlay.scrollTop = 0;
     });
   });
 
@@ -697,65 +565,11 @@ body {
     if (e.key === 'ArrowRight') showCard((currentIndex + 1) % cards.length);
   });
 
-  // Mobile vertical arrow navigation
-  const grid = document.querySelector('.card-grid');
-  const arrowUp = document.getElementById('arrow-up');
-  const arrowDown = document.getElementById('arrow-down');
-  const allItems = grid.querySelectorAll('.card-link, .card-container');
-  let mobileIdx = 0;
-
-  function updateArrowVisibility() {
-    if (window.innerWidth > 1200) return;
-    const isFirst = mobileIdx === 0;
-    const isLast = mobileIdx === allItems.length - 1;
-    arrowUp.style.opacity = isFirst ? '0' : '1';
-    arrowUp.style.pointerEvents = isFirst ? 'none' : 'auto';
-    arrowDown.style.opacity = isLast ? '0' : '1';
-    arrowDown.style.pointerEvents = isLast ? 'none' : 'auto';
   }
 
-  function scrollToMobileCard(idx) {
-    mobileIdx = Math.max(0, Math.min(idx, allItems.length - 1));
-    allItems[mobileIdx].scrollIntoView({ behavior: 'smooth', block: 'center' });
-    updateArrowVisibility();
-  }
 
-  arrowUp.addEventListener('click', () => scrollToMobileCard(mobileIdx - 1));
-  arrowDown.addEventListener('click', () => scrollToMobileCard(mobileIdx + 1));
 
-  let sTimer;
-  grid.addEventListener('scroll', () => {
-    clearTimeout(sTimer);
-    sTimer = setTimeout(() => {
-      const gr = grid.getBoundingClientRect();
-      const cy = gr.top + gr.height / 2;
-      let best = 0, bestD = 1e9;
-      allItems.forEach((el, i) => {
-        const r = el.getBoundingClientRect();
-        const d = Math.abs(r.top + r.height / 2 - cy);
-        if (d < bestD) { bestD = d; best = i; }
-      });
-      mobileIdx = best;
-      updateArrowVisibility();
-    }, 100);
-  });
 
-  updateArrowVisibility();
-
-  // Button alignment + arrow positioning
-  function alignButtons() {
-    // Wrapper sizing handled by CSS (inline-block shrink-wraps to image)
-
-    // Arrow positioning removed — using edge peek navigation
-  }
-
-  // Run on load, resize, and after images load
-  window.addEventListener('load', alignButtons);
-  window.addEventListener('resize', alignButtons);
-  document.querySelectorAll('.card-grid img').forEach(img => {
-    img.addEventListener('load', alignButtons);
-    if (img.complete) alignButtons();
-  });
 
   // One-time bounce on first load to hint at scrollability
   if (isMobile()) {
