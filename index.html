@@ -51,6 +51,12 @@
     border-radius: 3.5%;
   }
 
+  .card-link picture {
+    display: block;
+    width: 100%;
+    height: 100%;
+  }
+
   .card-link:hover img {
     transform: scale(1.03);
   }
@@ -140,6 +146,12 @@
     width: 100%;
     height: 100%;
     position: relative;
+  }
+
+  .card-container picture {
+    display: block;
+    width: 100%;
+    height: 100%;
   }
 
   .tickets-btn {
@@ -376,7 +388,13 @@
     object-fit: contain;
     border-radius: 3.5%;
   }
-  body.landscape-mode .card-link:hover img {
+  body.landscape-mode .card-link picture {
+    display: block;
+    width: 100%;
+    height: 100%;
+  }
+
+  .card-link:hover img {
     transform: scale(1.03);
   }
   body.landscape-mode .card-container:hover {
