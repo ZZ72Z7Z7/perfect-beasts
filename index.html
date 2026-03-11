@@ -109,9 +109,9 @@ body {
       display: none;
     }
     .card-link {
-      flex: 0 0 100vh;
+      flex: 0 0 88vh;
       width: 100vw;
-      height: 100vh;
+      height: 88vh;
       scroll-snap-align: center;
       display: flex;
       align-items: center;
@@ -123,7 +123,7 @@ body {
       width: auto;
       max-width: 95vw;
       height: auto;
-      max-height: calc(100vh - 40px);
+      max-height: calc(88vh - 20px);
       object-fit: contain;
       transition: none;
       filter: var(--card-shadow);
@@ -210,9 +210,9 @@ body {
 
   @media (max-width: 1200px) {
     .card-container {
-      flex: 0 0 100vh;
+      flex: 0 0 88vh;
       width: 100vw;
-      height: 100vh;
+      height: 88vh;
       scroll-snap-align: center;
       display: flex;
       align-items: center;
@@ -231,7 +231,7 @@ body {
       width: auto;
       max-width: 95vw;
       height: auto;
-      max-height: calc(100vh - 40px);
+      max-height: calc(88vh - 20px);
       display: block;
       filter: var(--card-shadow);
     }
@@ -375,11 +375,11 @@ body {
 
   @media (max-width: 1200px) and (orientation: landscape) {
     .card-link, .card-container {
-      flex: 0 0 100vh;
+      flex: 0 0 88vh;
       scroll-snap-align: center;
     }
     .card-link img, .card-container img {
-      max-height: calc(100vh - 40px);
+      max-height: calc(88vh - 20px);
       max-width: 70vw;
     }
     .mobile-arrows {
@@ -473,44 +473,9 @@ body {
       width: auto;
       max-width: 95vw;
       height: auto;
-      max-height: calc(100vh - 40px);
+      max-height: calc(88vh - 20px);
       display: block;
       border-radius: 3.5%;
-    }
-  }
-
-  /* Dot indicators */
-  .dot-indicators {
-    display: none;
-    position: fixed;
-    bottom: 16px;
-    left: 0;
-    right: 0;
-    z-index: 150;
-    text-align: center;
-    pointer-events: none;
-  }
-
-  .dot {
-    display: inline-block;
-    width: 8px;
-    height: 8px;
-    border-radius: 50%;
-    background: rgba(255, 255, 255, 0.35);
-    margin: 0 5px;
-    transition: background 0.3s ease, transform 0.3s ease;
-    pointer-events: auto;
-    cursor: pointer;
-  }
-
-  .dot.active {
-    background: rgba(255, 255, 255, 0.85);
-    transform: scale(1.3);
-  }
-
-  @media (max-width: 1200px) {
-    .dot-indicators {
-      display: block;
     }
   }
 </style>
@@ -586,15 +551,6 @@ body {
 </div>
 
 
-
-<div class="dot-indicators" id="dot-indicators">
-  <span class="dot active" data-index="0"></span>
-  <span class="dot" data-index="1"></span>
-  <span class="dot" data-index="2"></span>
-  <span class="dot" data-index="3"></span>
-  <span class="dot" data-index="4"></span>
-  <span class="dot" data-index="5"></span>
-</div>
 <div class="mobile-zoom-overlay" id="mobile-zoom">
   <button class="mobile-zoom-close" id="mobile-zoom-close">&times;</button>
   <div class="mobile-zoom-container" id="mobile-zoom-container">
@@ -788,44 +744,6 @@ body {
       if (img) openMobileZoom(img.src);
     });
   });
-
-  // Dot indicators
-  const dotContainer = document.getElementById('dot-indicators');
-  const dots = dotContainer.querySelectorAll('.dot');
-
-  function updateDots(idx) {
-    dots.forEach((d, i) => {
-      d.classList.toggle('active', i === idx);
-    });
-  }
-
-  dots.forEach((dot) => {
-    dot.addEventListener('click', () => {
-      const idx = parseInt(dot.dataset.index);
-      mobileIdx = idx;
-      allItems[idx].scrollIntoView({ behavior: 'smooth', block: 'center' });
-      updateDots(idx);
-    });
-  });
-
-  let dotTimer;
-  grid.addEventListener('scroll', () => {
-    clearTimeout(dotTimer);
-    dotTimer = setTimeout(() => {
-      const gr = grid.getBoundingClientRect();
-      const cy = gr.top + gr.height / 2;
-      let best = 0, bestD = 1e9;
-      allItems.forEach((el, i) => {
-        const r = el.getBoundingClientRect();
-        const d = Math.abs(r.top + r.height / 2 - cy);
-        if (d < bestD) { bestD = d; best = i; }
-      });
-      mobileIdx = best;
-      updateDots(best);
-    }, 100);
-  });
-
-  updateDots(0);
 </script>
 </body>
 </html>
