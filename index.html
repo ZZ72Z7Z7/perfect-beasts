@@ -433,20 +433,85 @@
   body.landscape-mode .lightbox-arrow {
     display: none !important;
   }
+
+  /* Card flip animation - 9:16 mobile only */
+  .card-flip-container {
+    perspective: 1200px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .card-flip-inner {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    transition: transform 0.5s ease;
+    transform-style: preserve-3d;
+  }
+
+  .card-flip-inner.flipped {
+    transform: rotateY(180deg);
+  }
+
+  .card-flip-front,
+  .card-flip-back {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+  }
+
+  .card-flip-back {
+    transform: rotateY(180deg);
+  }
+
+  .card-flip-front img,
+  .card-flip-back img {
+    width: auto;
+    max-width: 95vw;
+    height: auto;
+    max-height: calc(88vh - 20px);
+    object-fit: contain;
+    filter: var(--card-shadow);
+    border-radius: 3.5%;
+    display: block;
+  }
+
+  .flip-hint {
+    position: absolute;
+    bottom: 8px;
+    left: 0;
+    right: 0;
+    text-align: center;
+    color: rgba(255, 255, 255, 0.6);
+    font-size: 12px;
+    font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.5s ease;
+  }
+
+  .flip-hint.visible {
+    opacity: 1;
+  }
 </style>
 </head>
 <body>
 <div class="card-grid">
   <div class="card-link">
     <picture>
-      <source media="(max-width: 1200px) and (orientation: portrait)" srcset="images/card-01_mobile.jpg">
+      <source media="(max-width: 1200px) and (max-aspect-ratio: 3/4)" srcset="images/card-01_mobile.jpg">
       <img src="images/card-01.jpg" alt="Perfect Beasts" width="1200" height="1665">
     </picture>
   </div>
   <div class="card-container">
     <div class="card-link-bg">
       <picture>
-        <source media="(max-width: 1200px) and (orientation: portrait)" srcset="images/card-02_mobile.jpg">
+        <source media="(max-width: 1200px) and (max-aspect-ratio: 3/4)" srcset="images/card-02_mobile.jpg">
         <img src="images/card-02.jpg" loading="lazy" alt="Modern Bouffon" width="1200" height="1665">
       </picture>
       <a class="tickets-btn" href="https://events.humanitix.com/perfect-beasts-show?h=SiM6BMJovS77kORXZSL4397t2JGi-UL91hsHhQG78Pg&amp;t=1773109967777" target="_blank" rel="noopener">Tickets</a>
@@ -454,26 +519,26 @@
   </div>
   <div class="card-link">
     <picture>
-      <source media="(max-width: 1200px) and (orientation: portrait)" srcset="images/card-03_mobile.jpg">
+      <source media="(max-width: 1200px) and (max-aspect-ratio: 3/4)" srcset="images/card-03_mobile.jpg">
       <img src="images/card-03.jpg" loading="lazy" alt="Bouffon Info" width="1200" height="1665">
     </picture>
   </div>
   <div class="card-link">
     <picture>
-      <source media="(max-width: 1200px) and (orientation: portrait)" srcset="images/card-04_mobile.jpg">
-      <img src="images/card-04.jpg" loading="lazy" alt="Minotaur" width="1200" height="1665">
+      <source media="(max-width: 1200px) and (max-aspect-ratio: 3/4)" srcset="images/card-04_mobile_front.jpg">
+      <img src="images/card-04.jpg" loading="lazy" alt="Minotaur" data-flip-front="images/card-04_mobile_front.jpg" data-flip-back="images/card-04_mobile_back.jpg" width="1200" height="1665">
     </picture>
   </div>
   <div class="card-link">
     <picture>
-      <source media="(max-width: 1200px) and (orientation: portrait)" srcset="images/card-05_mobile.jpg">
-      <img src="images/card-05.jpg" loading="lazy" alt="Mimi" width="1200" height="1665">
+      <source media="(max-width: 1200px) and (max-aspect-ratio: 3/4)" srcset="images/card-05_mobile_front.jpg">
+      <img src="images/card-05.jpg" loading="lazy" alt="Mimi" data-flip-front="images/card-05_mobile_front.jpg" data-flip-back="images/card-05_mobile_back.jpg" width="1200" height="1665">
     </picture>
   </div>
   <div class="card-container">
     <div class="card-link-bg">
       <picture>
-        <source media="(max-width: 1200px) and (orientation: portrait)" srcset="images/card-06_mobile.jpg">
+        <source media="(max-width: 1200px) and (max-aspect-ratio: 3/4)" srcset="images/card-06_mobile.jpg">
         <img src="images/card-06.jpg" loading="lazy" alt="Workshop" width="1200" height="1665">
       </picture>
       <a class="tickets-btn btn-workshop-info" href="https://events.humanitix.com/perfect-beasts-workshop?h=KWJzFsmMzytsI2L-ip8YO90t5slrTo0ZabbFX4dDF9o&amp;t=1773102944347" target="_blank" rel="noopener">Info & Registration</a>
@@ -527,6 +592,10 @@
 
   function isMobile() {
     return window.innerWidth <= 1200 && window.innerHeight > window.innerWidth;
+  }
+
+  function is916Mode() {
+    return window.innerWidth <= 1200 && (window.innerHeight / window.innerWidth) > (4 / 3);
   }
 
   cards.forEach(function(card, i) {
@@ -593,6 +662,110 @@
       }, 800);
     }
   });
+
+  // Card flip functionality for cards 4 and 5 in 9:16 mode
+  function setupFlipCards() {
+    var flippableImgs = document.querySelectorAll('img[data-flip-front]');
+
+    flippableImgs.forEach(function(img) {
+      var cardLink = img.closest('.card-link');
+      if (!cardLink) return;
+
+      // Build flip structure
+      var picture = img.closest('picture');
+      var container = picture ? picture.parentElement : img.parentElement;
+
+      // Create flip wrapper
+      var flipContainer = document.createElement('div');
+      flipContainer.className = 'card-flip-container';
+
+      var flipInner = document.createElement('div');
+      flipInner.className = 'card-flip-inner';
+
+      var flipFront = document.createElement('div');
+      flipFront.className = 'card-flip-front';
+
+      var flipBack = document.createElement('div');
+      flipBack.className = 'card-flip-back';
+
+      var backImg = document.createElement('img');
+      backImg.src = img.dataset.flipBack;
+      backImg.alt = img.alt + ' (back)';
+      backImg.loading = 'lazy';
+
+      // Move picture/img into front
+      if (picture) {
+        flipFront.appendChild(picture);
+      } else {
+        flipFront.appendChild(img);
+      }
+
+      flipBack.appendChild(backImg);
+      flipInner.appendChild(flipFront);
+      flipInner.appendChild(flipBack);
+      flipContainer.appendChild(flipInner);
+
+      // Add hint
+      var hint = document.createElement('div');
+      hint.className = 'flip-hint';
+      hint.textContent = 'tap to flip';
+      flipContainer.appendChild(hint);
+
+      container.appendChild(flipContainer);
+
+      // Size the flip container to match the front image
+      function sizeFlip() {
+        var frontImg = flipFront.querySelector('img');
+        if (frontImg && frontImg.offsetHeight > 0) {
+          flipContainer.style.width = frontImg.offsetWidth + 'px';
+          flipContainer.style.height = frontImg.offsetHeight + 'px';
+        }
+      }
+
+      var frontImg = flipFront.querySelector('img');
+      if (frontImg) {
+        frontImg.addEventListener('load', sizeFlip);
+        if (frontImg.complete) sizeFlip();
+      }
+      backImg.addEventListener('load', sizeFlip);
+      window.addEventListener('resize', sizeFlip);
+
+      // Track touch to distinguish tap from scroll
+      var touchMoved = false;
+      cardLink.addEventListener('touchstart', function() {
+        touchMoved = false;
+      }, { passive: true });
+      cardLink.addEventListener('touchmove', function() {
+        touchMoved = true;
+      }, { passive: true });
+
+      // Tap to flip (only in 9:16 mobile mode)
+      cardLink.addEventListener('click', function(e) {
+        if (!is916Mode()) return;
+        if (touchMoved) return;
+        e.preventDefault();
+        e.stopPropagation();
+        flipInner.classList.toggle('flipped');
+      });
+
+      // Show hint briefly on first load
+      cardLink._flipHint = hint;
+    });
+
+    // Show flip hints after a delay
+    setTimeout(function() {
+      if (is916Mode()) {
+        document.querySelectorAll('.flip-hint').forEach(function(hint) {
+          hint.classList.add('visible');
+          setTimeout(function() {
+            hint.classList.remove('visible');
+          }, 2500);
+        });
+      }
+    }, 1500);
+  }
+
+  setupFlipCards();
 </script>
 </body>
 </html>
