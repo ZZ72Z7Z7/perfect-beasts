@@ -397,7 +397,7 @@ body {
     transform: scale(1.03);
   }
 
-  
+  @media (max-width: 1200px) {
     picture img {
       width: auto;
       max-width: 95vw;
@@ -492,35 +492,33 @@ body {
   </div>
   <button class="lightbox-arrow lightbox-arrow-right" id="lightbox-next">&#8250;</button>
 </div>
-
-
 <script>
-  const overlay = document.getElementById('lightbox');
-  const lightboxImg = document.getElementById('lightbox-img');
-  const lbCard2Tickets = document.querySelector('.lb-card2-tickets');
-  const lbCard6Info = document.querySelector('.lb-card6-info');
-  const lbCard6Contact = document.querySelector('.lb-card6-contact');
-  const prevBtn = document.getElementById('lightbox-prev');
-  const nextBtn = document.getElementById('lightbox-next');
+  var overlay = document.getElementById('lightbox');
+  var lightboxImg = document.getElementById('lightbox-img');
+  var lbCard2Tickets = document.querySelector('.lb-card2-tickets');
+  var lbCard6Info = document.querySelector('.lb-card6-info');
+  var lbCard6Contact = document.querySelector('.lb-card6-contact');
+  var prevBtn = document.getElementById('lightbox-prev');
+  var nextBtn = document.getElementById('lightbox-next');
 
-  const cards = [];
-  document.querySelectorAll('.card-link, .card-container').forEach((card, idx) => {
-    const img = card.querySelector('img');
+  var cards = [];
+  document.querySelectorAll('.card-link, .card-container').forEach(function(card, idx) {
+    var img = card.querySelector('img');
     if (img) {
       cards.push({ src: img.src, cardIndex: idx, el: card });
     }
   });
 
-  let currentIndex = 0;
+  var currentIndex = 0;
 
   function showCard(index) {
     currentIndex = index;
     lightboxImg.src = cards[index].src;
-    const ci = cards[index].cardIndex;
+    var ci = cards[index].cardIndex;
     lbCard2Tickets.style.display = ci === 1 ? 'block' : 'none';
     lbCard6Info.style.display = ci === 5 ? 'block' : 'none';
     lbCard6Contact.style.display = ci === 5 ? 'block' : 'none';
-    }
+  }
 
   function closeLightbox() {
     overlay.classList.remove('active');
@@ -531,8 +529,8 @@ body {
     return window.innerWidth <= 1200 && window.innerHeight > window.innerWidth;
   }
 
-  cards.forEach((card, i) => {
-    card.el.addEventListener('click', (e) => {
+  cards.forEach(function(card, i) {
+    card.el.addEventListener('click', function(e) {
       if (e.target.closest('.tickets-btn')) return;
       if (isMobile()) return;
       e.preventDefault();
@@ -542,35 +540,29 @@ body {
     });
   });
 
-  prevBtn.addEventListener('click', (e) => {
+  prevBtn.addEventListener('click', function(e) {
     e.stopPropagation();
     showCard((currentIndex - 1 + cards.length) % cards.length);
   });
 
-  nextBtn.addEventListener('click', (e) => {
+  nextBtn.addEventListener('click', function(e) {
     e.stopPropagation();
     showCard((currentIndex + 1) % cards.length);
   });
 
-  overlay.addEventListener('click', (e) => {
+  overlay.addEventListener('click', function(e) {
     if (e.target.closest('.lightbox-arrow')) return;
     if (e.target.closest('.lightbox-btn')) return;
     closeLightbox();
   });
 
-  document.addEventListener('keydown', (e) => {
+  document.addEventListener('keydown', function(e) {
     if (!overlay.classList.contains('active')) return;
     if (e.key === 'Escape') closeLightbox();
     if (e.key === 'ArrowLeft') showCard((currentIndex - 1 + cards.length) % cards.length);
     if (e.key === 'ArrowRight') showCard((currentIndex + 1) % cards.length);
   });
 
-
-
-
-
-  
-  // Detect landscape mode and toggle class
   function updateOrientation() {
     if (window.innerWidth <= 1200 && window.innerWidth > window.innerHeight) {
       document.body.classList.add('landscape-mode');
@@ -580,18 +572,17 @@ body {
   }
   updateOrientation();
   window.addEventListener('resize', updateOrientation);
-  window.addEventListener('orientationchange', () => {
+  window.addEventListener('orientationchange', function() {
     setTimeout(updateOrientation, 100);
   });
 
-  const grid = document.querySelector('.card-grid');
+  var grid = document.querySelector('.card-grid');
 
-  // One-time bounce on first load to hint at scrollability
   if (isMobile()) {
-    window.addEventListener('load', () => {
-      setTimeout(() => {
+    window.addEventListener('load', function() {
+      setTimeout(function() {
         grid.scrollTo({ top: 60, behavior: 'smooth' });
-        setTimeout(() => {
+        setTimeout(function() {
           grid.scrollTo({ top: 0, behavior: 'smooth' });
         }, 400);
       }, 800);
