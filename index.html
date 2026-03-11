@@ -94,6 +94,7 @@
       object-fit: contain;
       transition: none;
       filter: var(--card-shadow);
+      border-radius: 3.5%;
     }
     .card-link:hover img {
       transform: none;
@@ -103,26 +104,12 @@
   @media (min-width: 2001px) {
     .card-grid {
       max-width: 2400px;
-      justify-content: center;
     }
-    .card-grid > * {
+    .card-link {
       width: calc(33.333% - 16px);
     }
-    /* Invisible line break after first row */
-    .card-grid::before {
-      content: '';
-      flex-basis: 100%;
-      height: 0;
-      order: 1;
-      margin-top: -24px;
-    }
-    /* First 3 cards stay in natural order */
-    .card-grid > :nth-child(-n+3) {
-      order: 0;
-    }
-    /* Everything after first 3 goes after the break */
-    .card-grid > :nth-child(n+4) {
-      order: 2;
+    .card-container {
+      width: calc(33.333% - 16px);
     }
   }
 
@@ -169,7 +156,7 @@
     background: transparent;
     color: transparent;
     font-size: 0;
-    transition: background 0.2s ease;
+    transition: backdrop-filter 0.2s ease;
   }
 
   .tickets-btn:hover {
@@ -223,9 +210,6 @@
       transform: none;
     }
   }
-
-
-
 
   /* Lightbox */
   .lightbox-overlay {
@@ -339,16 +323,6 @@
   .lightbox-arrow-right {
     right: calc((50% - 47.5vh * 1200/1665) / 4 * 3 - 28px);
     padding-left: 3px;
-  }
-
-  @media (max-width: 600px) {
-    .lightbox-arrow {
-      width: 40px;
-      height: 40px;
-      font-size: 20px;
-    }
-    .lightbox-arrow-left { left: calc((50% - 47.5vh * 1200/1665) / 4 * 3 - 20px); }
-    .lightbox-arrow-right { right: calc((50% - 47.5vh * 1200/1665) / 4 * 3 - 20px); }
   }
 
   /* Landscape grid - triggered by JS .landscape-mode class */
@@ -508,12 +482,6 @@
     animation: card-wobble 0.6s ease;
   }
 
-  /* Hide back cards on mobile portrait single stack */
-  @media (max-width: 1200px) {
-    .card-desktop-only {
-      display: none;
-    }
-  }
 </style>
 </head>
 <body>
@@ -545,17 +513,11 @@
       <img src="images/card-04_front.jpg" loading="lazy" alt="Minotaur" data-flip-front="images/card-04_mobile_front.jpg" data-flip-back="images/card-04_mobile_back.jpg" width="1200" height="1665">
     </picture>
   </div>
-  <div class="card-link card-desktop-only">
-    <img src="images/card-04_back.jpg" loading="lazy" alt="Minotaur (back)" width="1200" height="1665">
-  </div>
   <div class="card-link">
     <picture>
       <source media="(max-width: 1200px) and (max-aspect-ratio: 3/4)" srcset="images/card-05_mobile_front.jpg">
       <img src="images/card-05_front.jpg" loading="lazy" alt="Mimi" data-flip-front="images/card-05_mobile_front.jpg" data-flip-back="images/card-05_mobile_back.jpg" width="1200" height="1665">
     </picture>
-  </div>
-  <div class="card-link card-desktop-only">
-    <img src="images/card-05_back.jpg" loading="lazy" alt="Mimi (back)" width="1200" height="1665">
   </div>
   <div class="card-container">
     <div class="card-link-bg">
@@ -603,8 +565,8 @@
     lightboxImg.src = cards[index].src;
     var ci = cards[index].cardIndex;
     lbCard2Tickets.style.display = ci === 1 ? 'block' : 'none';
-    lbCard6Info.style.display = ci === 7 ? 'block' : 'none';
-    lbCard6Contact.style.display = ci === 7 ? 'block' : 'none';
+    lbCard6Info.style.display = ci === 5 ? 'block' : 'none';
+    lbCard6Contact.style.display = ci === 5 ? 'block' : 'none';
   }
 
   function closeLightbox() {
@@ -636,21 +598,13 @@
 
   prevBtn.addEventListener('click', function(e) {
     e.stopPropagation();
-    var next = currentIndex;
-    do {
-      next = (next - 1 + cards.length) % cards.length;
-    } while (cards[next].el.offsetParent === null && next !== currentIndex);
-    showCard(next);
+    showCard((currentIndex - 1 + cards.length) % cards.length);
     overlay.scrollTop = 0;
   });
 
   nextBtn.addEventListener('click', function(e) {
     e.stopPropagation();
-    var next = currentIndex;
-    do {
-      next = (next + 1) % cards.length;
-    } while (cards[next].el.offsetParent === null && next !== currentIndex);
-    showCard(next);
+    showCard((currentIndex + 1) % cards.length);
     overlay.scrollTop = 0;
   });
 
@@ -694,7 +648,7 @@
   });
 
   function setupFlipCards() {
-    if (!isMobile()) return;
+    if (!is916Mode()) return;
     var flippableImgs = document.querySelectorAll('img[data-flip-front]');
 
     flippableImgs.forEach(function(img) {
@@ -758,7 +712,7 @@
       }, { passive: true });
 
       cardLink.addEventListener('click', function(e) {
-        if (!isMobile()) return;
+        if (!is916Mode()) return;
         if (touchMoved) return;
         e.preventDefault();
         e.stopPropagation();
