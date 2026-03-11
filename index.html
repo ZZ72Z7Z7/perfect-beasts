@@ -570,11 +570,11 @@ body {
     if (e.key === 'ArrowRight') showCard((currentIndex + 1) % cards.length);
   });
 
-  }
 
 
 
 
+  const grid = document.querySelector('.card-grid');
 
   // One-time bounce on first load to hint at scrollability
   if (isMobile()) {
