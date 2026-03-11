@@ -493,6 +493,13 @@
   .card-flip-inner.wobble {
     animation: card-wobble 0.6s ease;
   }
+
+  /* Hide back cards on mobile portrait single stack */
+  @media (max-width: 1200px) {
+    .card-desktop-only {
+      display: none;
+    }
+  }
 </style>
 </head>
 <body>
@@ -521,14 +528,20 @@
   <div class="card-link">
     <picture>
       <source media="(max-width: 1200px) and (max-aspect-ratio: 3/4)" srcset="images/card-04_mobile_front.jpg">
-      <img src="images/card-04.jpg" loading="lazy" alt="Minotaur" data-flip-front="images/card-04_mobile_front.jpg" data-flip-back="images/card-04_mobile_back.jpg" width="1200" height="1665">
+      <img src="images/card-04_front.jpg" loading="lazy" alt="Minotaur" data-flip-front="images/card-04_mobile_front.jpg" data-flip-back="images/card-04_mobile_back.jpg" width="1200" height="1665">
     </picture>
+  </div>
+  <div class="card-link card-desktop-only">
+    <img src="images/card-04_back.jpg" loading="lazy" alt="Minotaur (back)" width="1200" height="1665">
   </div>
   <div class="card-link">
     <picture>
       <source media="(max-width: 1200px) and (max-aspect-ratio: 3/4)" srcset="images/card-05_mobile_front.jpg">
-      <img src="images/card-05.jpg" loading="lazy" alt="Mimi" data-flip-front="images/card-05_mobile_front.jpg" data-flip-back="images/card-05_mobile_back.jpg" width="1200" height="1665">
+      <img src="images/card-05_front.jpg" loading="lazy" alt="Mimi" data-flip-front="images/card-05_mobile_front.jpg" data-flip-back="images/card-05_mobile_back.jpg" width="1200" height="1665">
     </picture>
+  </div>
+  <div class="card-link card-desktop-only">
+    <img src="images/card-05_back.jpg" loading="lazy" alt="Mimi (back)" width="1200" height="1665">
   </div>
   <div class="card-container">
     <div class="card-link-bg">
@@ -574,10 +587,13 @@
   function showCard(index) {
     currentIndex = index;
     lightboxImg.src = cards[index].src;
+    // Map cardIndex to button visibility
+    // Card indexes shifted: 0=title, 1=info, 2=bouffon, 3=minotaur front, 
+    // 4=minotaur back, 5=mimi front, 6=mimi back, 7=workshop
     var ci = cards[index].cardIndex;
     lbCard2Tickets.style.display = ci === 1 ? 'block' : 'none';
-    lbCard6Info.style.display = ci === 5 ? 'block' : 'none';
-    lbCard6Contact.style.display = ci === 5 ? 'block' : 'none';
+    lbCard6Info.style.display = ci === 7 ? 'block' : 'none';
+    lbCard6Contact.style.display = ci === 7 ? 'block' : 'none';
   }
 
   function closeLightbox() {
@@ -609,13 +625,22 @@
 
   prevBtn.addEventListener('click', function(e) {
     e.stopPropagation();
-    showCard((currentIndex - 1 + cards.length) % cards.length);
+    // Skip hidden desktop-only cards when in mobile/landscape
+    var next = currentIndex;
+    do {
+      next = (next - 1 + cards.length) % cards.length;
+    } while (cards[next].el.offsetParent === null && next !== currentIndex);
+    showCard(next);
     overlay.scrollTop = 0;
   });
 
   nextBtn.addEventListener('click', function(e) {
     e.stopPropagation();
-    showCard((currentIndex + 1) % cards.length);
+    var next = currentIndex;
+    do {
+      next = (next + 1) % cards.length;
+    } while (cards[next].el.offsetParent === null && next !== currentIndex);
+    showCard(next);
     overlay.scrollTop = 0;
   });
 
@@ -628,8 +653,8 @@
   document.addEventListener('keydown', function(e) {
     if (!overlay.classList.contains('active')) return;
     if (e.key === 'Escape') closeLightbox();
-    if (e.key === 'ArrowLeft') showCard((currentIndex - 1 + cards.length) % cards.length);
-    if (e.key === 'ArrowRight') showCard((currentIndex + 1) % cards.length);
+    if (e.key === 'ArrowLeft') prevBtn.click();
+    if (e.key === 'ArrowRight') nextBtn.click();
   });
 
   function updateOrientation() {
@@ -753,7 +778,6 @@
         if (triggered[id]) return;
         triggered[id] = true;
 
-        // Wobble at 1 second
         setTimeout(function() {
           el.classList.add('wobble');
           el.addEventListener('animationend', function() {
@@ -761,7 +785,6 @@
           }, { once: true });
         }, 1000);
 
-        // Auto-flip to back at 3 seconds, no auto-flip back
         setTimeout(function() {
           if (!el.classList.contains('flipped')) {
             el.classList.add('flipped');
