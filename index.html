@@ -740,16 +740,20 @@
   setupFlipCards();
 
   // Wobble + auto-flip when flippable cards scroll into view
-  if (is916Mode()) {
+  window.addEventListener('load', function() {
+    if (!is916Mode()) return;
     var triggered = {};
     var flipInners = document.querySelectorAll('.card-flip-inner');
+    if (flipInners.length === 0) return;
 
     var flipObserver = new IntersectionObserver(function(entries) {
       entries.forEach(function(entry) {
         if (!entry.isIntersecting) return;
         var el = entry.target;
         var cardLink = el.closest('.card-link');
-        var id = cardLink.querySelector('img').alt;
+        if (!cardLink) return;
+        var img = cardLink.querySelector('img');
+        var id = img ? img.alt : '';
         if (triggered[id]) return;
         triggered[id] = true;
 
@@ -763,20 +767,24 @@
 
         // Auto-flip to back at 5 seconds
         setTimeout(function() {
-          el.classList.add('flipped');
+          if (!el.classList.contains('flipped')) {
+            el.classList.add('flipped');
+          }
         }, 5000);
 
         // Auto-flip back to front at 15 seconds
         setTimeout(function() {
-          el.classList.remove('flipped');
+          if (el.classList.contains('flipped')) {
+            el.classList.remove('flipped');
+          }
         }, 15000);
       });
-    }, { threshold: 0.8 });
+    }, { threshold: 0.3 });
 
     flipInners.forEach(function(inner) {
       flipObserver.observe(inner);
     });
-  }
+  });
 </script>
 </body>
 </html>
