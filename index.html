@@ -481,23 +481,6 @@
     display: block;
   }
 
-  .flip-hint {
-    position: absolute;
-    bottom: 8px;
-    left: 0;
-    right: 0;
-    text-align: center;
-    color: rgba(255, 255, 255, 0.6);
-    font-size: 12px;
-    font-family: -apple-system, BlinkMacSystemFont, sans-serif;
-    pointer-events: none;
-    opacity: 0;
-    transition: opacity 0.5s ease;
-  }
-
-  .flip-hint.visible {
-    opacity: 1;
-  }
 
   @keyframes card-wobble {
     0% { transform: rotateY(0deg); }
@@ -713,12 +696,6 @@
       flipInner.appendChild(flipFront);
       flipInner.appendChild(flipBack);
       flipContainer.appendChild(flipInner);
-
-      var hint = document.createElement('div');
-      hint.className = 'flip-hint';
-      hint.textContent = 'tap to flip';
-      flipContainer.appendChild(hint);
-
       container.appendChild(flipContainer);
 
       function sizeFlip() {
@@ -737,6 +714,7 @@
       backImg.addEventListener('load', sizeFlip);
       window.addEventListener('resize', sizeFlip);
 
+      // Track touch to distinguish tap from scroll
       var touchMoved = false;
       cardLink.addEventListener('touchstart', function() {
         touchMoved = false;
@@ -745,6 +723,7 @@
         touchMoved = true;
       }, { passive: true });
 
+      // Manual tap to flip
       cardLink.addEventListener('click', function(e) {
         if (!is916Mode()) return;
         if (touchMoved) return;
@@ -753,46 +732,49 @@
         flipInner.classList.toggle('flipped');
       });
 
-      cardLink._flipHint = hint;
+      // Store reference for auto-flip
+      cardLink._flipInner = flipInner;
     });
-
-    setTimeout(function() {
-      if (is916Mode()) {
-        document.querySelectorAll('.flip-hint').forEach(function(hint) {
-          hint.classList.add('visible');
-          setTimeout(function() {
-            hint.classList.remove('visible');
-          }, 2500);
-        });
-      }
-    }, 1500);
   }
 
   setupFlipCards();
 
-  // Wobble hint when flippable cards scroll into view
+  // Wobble + auto-flip when flippable cards scroll into view
   if (is916Mode()) {
-    var wobbled = {};
+    var triggered = {};
     var flipInners = document.querySelectorAll('.card-flip-inner');
 
-    var wobbleObserver = new IntersectionObserver(function(entries) {
+    var flipObserver = new IntersectionObserver(function(entries) {
       entries.forEach(function(entry) {
         if (!entry.isIntersecting) return;
         var el = entry.target;
-        var id = el.closest('.card-link').querySelector('img').alt;
-        if (wobbled[id]) return;
-        wobbled[id] = true;
+        var cardLink = el.closest('.card-link');
+        var id = cardLink.querySelector('img').alt;
+        if (triggered[id]) return;
+        triggered[id] = true;
+
+        // Wobble at 1 second
         setTimeout(function() {
           el.classList.add('wobble');
           el.addEventListener('animationend', function() {
             el.classList.remove('wobble');
           }, { once: true });
         }, 1000);
+
+        // Auto-flip to back at 5 seconds
+        setTimeout(function() {
+          el.classList.add('flipped');
+        }, 5000);
+
+        // Auto-flip back to front at 15 seconds
+        setTimeout(function() {
+          el.classList.remove('flipped');
+        }, 15000);
       });
     }, { threshold: 0.8 });
 
     flipInners.forEach(function(inner) {
-      wobbleObserver.observe(inner);
+      flipObserver.observe(inner);
     });
   }
 </script>
