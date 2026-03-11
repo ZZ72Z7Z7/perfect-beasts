@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Perfect Beasts — Modern Bouffon</title>
-<meta property="og:title" content="Perfect Beasts — Modern Bouffon">
+<title>PERFECT BEASTS</title>
+<meta property="og:title" content="PERFECT BEASTS">
 <meta property="og:description" content="A modern bouffon performance featuring the Minotaur and Mimi. Get tickets and workshop info.">
 <meta property="og:type" content="website">
 <meta name="description" content="Perfect Beasts — A modern bouffon performance featuring the Minotaur and Mimi. Get tickets and workshop info.">
@@ -55,10 +55,8 @@
     transform: scale(1.03);
   }
 
-  
-
   @media (max-width: 1200px) {
-body {
+    body {
       overflow: hidden;
       height: 100vh;
     }
@@ -536,6 +534,8 @@ body {
       if (e.target.closest('.tickets-btn')) return;
       if (isMobile()) return;
       e.preventDefault();
+      var currentImg = card.el.querySelector('img');
+      if (currentImg) cards[i].src = currentImg.currentSrc || currentImg.src;
       showCard(i);
       overlay.classList.add('active');
       document.body.style.overflow = 'hidden';
@@ -546,11 +546,13 @@ body {
   prevBtn.addEventListener('click', function(e) {
     e.stopPropagation();
     showCard((currentIndex - 1 + cards.length) % cards.length);
+    overlay.scrollTop = 0;
   });
 
   nextBtn.addEventListener('click', function(e) {
     e.stopPropagation();
     showCard((currentIndex + 1) % cards.length);
+    overlay.scrollTop = 0;
   });
 
   overlay.addEventListener('click', function(e) {
@@ -581,16 +583,16 @@ body {
 
   var grid = document.querySelector('.card-grid');
 
-  if (isMobile()) {
-    window.addEventListener('load', function() {
+  window.addEventListener('load', function() {
+    if (isMobile()) {
       setTimeout(function() {
         grid.scrollTo({ top: 60, behavior: 'smooth' });
         setTimeout(function() {
           grid.scrollTo({ top: 0, behavior: 'smooth' });
         }, 400);
       }, 800);
-    });
-  }
+    }
+  });
 </script>
 </body>
 </html>
