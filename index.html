@@ -375,12 +375,12 @@ body {
 
   @media (max-width: 1200px) and (orientation: landscape) {
     .card-link, .card-container {
-      flex: 0 0 92vh;
-      scroll-snap-align: start;
+      flex: 0 0 100vh;
+      scroll-snap-align: center;
     }
     .card-link img, .card-container img {
-      max-height: calc(92vh - 24px);
-      max-width: 70vw;
+      max-height: calc(100vh - 16px);
+      max-width: 90vw;
     }
     .mobile-arrows {
       display: none !important;
@@ -688,7 +688,6 @@ body {
     img.addEventListener('load', alignButtons);
     if (img.complete) alignButtons();
   });
-
 
   // One-time bounce on first load to hint at scrollability
   if (isMobile()) {
