@@ -565,9 +565,21 @@ body {
     showCard((currentIndex + 1) % cards.length);
   });
 
+  // Track touch movement to distinguish scroll from tap
+  let touchStartY = 0;
+  let touchMoved = false;
+  overlay.addEventListener('touchstart', (e) => {
+    touchStartY = e.touches[0].clientY;
+    touchMoved = false;
+  }, { passive: true });
+  overlay.addEventListener('touchmove', () => {
+    touchMoved = true;
+  }, { passive: true });
+
   overlay.addEventListener('click', (e) => {
     if (e.target.closest('.lightbox-arrow')) return;
     if (e.target.closest('.lightbox-btn')) return;
+    if (touchMoved) { touchMoved = false; return; }
     closeLightbox();
   });
 
