@@ -658,7 +658,6 @@
     }
   });
 
-  // Card flip functionality for cards 4 and 5 in 9:16 mode
   function setupFlipCards() {
     var flippableImgs = document.querySelectorAll('img[data-flip-front]');
 
@@ -714,7 +713,6 @@
       backImg.addEventListener('load', sizeFlip);
       window.addEventListener('resize', sizeFlip);
 
-      // Track touch to distinguish tap from scroll
       var touchMoved = false;
       cardLink.addEventListener('touchstart', function() {
         touchMoved = false;
@@ -723,7 +721,6 @@
         touchMoved = true;
       }, { passive: true });
 
-      // Manual tap to flip
       cardLink.addEventListener('click', function(e) {
         if (!is916Mode()) return;
         if (touchMoved) return;
@@ -731,9 +728,6 @@
         e.stopPropagation();
         flipInner.classList.toggle('flipped');
       });
-
-      // Store reference for auto-flip
-      cardLink._flipInner = flipInner;
     });
   }
 
@@ -765,19 +759,12 @@
           }, { once: true });
         }, 1000);
 
-        // Auto-flip to back at 5 seconds
+        // Auto-flip to back at 3 seconds, no auto-flip back
         setTimeout(function() {
           if (!el.classList.contains('flipped')) {
             el.classList.add('flipped');
           }
-        }, 5000);
-
-        // Auto-flip back to front at 15 seconds
-        setTimeout(function() {
-          if (el.classList.contains('flipped')) {
-            el.classList.remove('flipped');
-          }
-        }, 15000);
+        }, 3000);
       });
     }, { threshold: 0.3 });
 
