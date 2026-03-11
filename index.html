@@ -520,6 +520,20 @@ body {
     }
   }
 
+
+  @media (max-width: 1200px) and (orientation: landscape) {
+    .lightbox-inner {
+      height: 80vh;
+      aspect-ratio: 1200 / 1665;
+      max-width: 100vw;
+    }
+    .lightbox-arrow {
+      display: none;
+    }
+    .lightbox-overlay {
+      background: rgba(0, 0, 0, 0.85);
+    }
+  }
 </style>
 </head>
 <body>
