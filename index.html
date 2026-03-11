@@ -103,6 +103,7 @@
   @media (min-width: 2001px) {
     .card-grid {
       max-width: 2400px;
+      justify-content: center;
     }
     .card-link {
       width: calc(33.333% - 16px);
@@ -212,6 +213,7 @@
       width: calc(33.333% - 16px);
     }
   }
+
 
   /* Lightbox */
   .lightbox-overlay {
@@ -587,9 +589,6 @@
   function showCard(index) {
     currentIndex = index;
     lightboxImg.src = cards[index].src;
-    // Map cardIndex to button visibility
-    // Card indexes shifted: 0=title, 1=info, 2=bouffon, 3=minotaur front, 
-    // 4=minotaur back, 5=mimi front, 6=mimi back, 7=workshop
     var ci = cards[index].cardIndex;
     lbCard2Tickets.style.display = ci === 1 ? 'block' : 'none';
     lbCard6Info.style.display = ci === 7 ? 'block' : 'none';
@@ -625,7 +624,6 @@
 
   prevBtn.addEventListener('click', function(e) {
     e.stopPropagation();
-    // Skip hidden desktop-only cards when in mobile/landscape
     var next = currentIndex;
     do {
       next = (next - 1 + cards.length) % cards.length;
@@ -683,7 +681,6 @@
     }
   });
 
-  // Card flip - mobile single stack only
   function setupFlipCards() {
     if (!isMobile()) return;
     var flippableImgs = document.querySelectorAll('img[data-flip-front]');
@@ -760,7 +757,6 @@
 
   setupFlipCards();
 
-  // Wobble + auto-flip when flippable cards scroll into view (9:16 mode only)
   window.addEventListener('load', function() {
     if (!is916Mode()) return;
     var triggered = {};
