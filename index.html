@@ -55,10 +55,6 @@
     transform: scale(1.03);
   }
 
-  .grid-break {
-    display: none;
-  }
-
   @media (max-width: 1200px) {
     body {
       overflow: hidden;
@@ -109,22 +105,24 @@
       max-width: 2400px;
       justify-content: center;
     }
-    /* First 3 cards: three across */
-    .card-grid > :nth-child(-n+3) {
+    .card-grid > * {
       width: calc(33.333% - 16px);
     }
-    /* Break forces new row after card 3 */
-    .grid-break {
-      display: block;
+    /* Invisible line break after first row */
+    .card-grid::before {
+      content: '';
       flex-basis: 100%;
       height: 0;
-      margin: 0;
-      padding: 0;
-      border: none;
+      order: 1;
+      margin-top: -24px;
     }
-    /* All cards after break: same size, 2 per row centered */
-    .card-grid > :nth-child(n+5) {
-      width: calc(33.333% - 16px);
+    /* First 3 cards stay in natural order */
+    .card-grid > :nth-child(-n+3) {
+      order: 0;
+    }
+    /* Everything after first 3 goes after the break */
+    .card-grid > :nth-child(n+4) {
+      order: 2;
     }
   }
 
@@ -541,7 +539,6 @@
       <img src="images/card-03.jpg" loading="lazy" alt="Bouffon Info" width="1200" height="1665">
     </picture>
   </div>
-  <div class="grid-break"></div>
   <div class="card-link">
     <picture>
       <source media="(max-width: 1200px) and (max-aspect-ratio: 3/4)" srcset="images/card-04_mobile_front.jpg">
