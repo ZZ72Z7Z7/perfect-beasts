@@ -493,6 +493,22 @@
   .card-flip-inner.wobble {
     animation: card-wobble 0.6s ease;
   }
+
+  /* Desktop/landscape card flip */
+  .card-link .card-flip-container {
+    width: 100%;
+    height: 100%;
+  }
+
+  .card-link .card-flip-front img,
+  .card-link .card-flip-back img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    filter: var(--card-shadow);
+    border-radius: 3.5%;
+    display: block;
+  }
 </style>
 </head>
 <body>
@@ -521,13 +537,13 @@
   <div class="card-link">
     <picture>
       <source media="(max-width: 1200px) and (max-aspect-ratio: 3/4)" srcset="images/card-04_mobile_front.jpg">
-      <img src="images/card-04.jpg" loading="lazy" alt="Minotaur" data-flip-front="images/card-04_mobile_front.jpg" data-flip-back="images/card-04_mobile_back.jpg" width="1200" height="1665">
+      <img src="images/card-04.jpg" loading="lazy" alt="Minotaur" data-flip-front="images/card-04_mobile_front.jpg" data-flip-back="images/card-04_mobile_back.jpg" data-flip-front-desktop="images/card-04_front.jpg" data-flip-back-desktop="images/card-04_back.jpg" width="1200" height="1665">
     </picture>
   </div>
   <div class="card-link">
     <picture>
       <source media="(max-width: 1200px) and (max-aspect-ratio: 3/4)" srcset="images/card-05_mobile_front.jpg">
-      <img src="images/card-05.jpg" loading="lazy" alt="Mimi" data-flip-front="images/card-05_mobile_front.jpg" data-flip-back="images/card-05_mobile_back.jpg" width="1200" height="1665">
+      <img src="images/card-05.jpg" loading="lazy" alt="Mimi" data-flip-front="images/card-05_mobile_front.jpg" data-flip-back="images/card-05_mobile_back.jpg" data-flip-front-desktop="images/card-05_front.jpg" data-flip-back-desktop="images/card-05_back.jpg" width="1200" height="1665">
     </picture>
   </div>
   <div class="card-container">
@@ -596,6 +612,7 @@
   cards.forEach(function(card, i) {
     card.el.addEventListener('click', function(e) {
       if (e.target.closest('.tickets-btn')) return;
+      if (e.target.closest('.card-flip-container')) return;
       if (isMobile()) return;
       e.preventDefault();
       var currentImg = card.el.querySelector('img');
@@ -658,6 +675,7 @@
     }
   });
 
+  // Card flip - works in all modes for cards with flip data attributes
   function setupFlipCards() {
     var flippableImgs = document.querySelectorAll('img[data-flip-front]');
 
@@ -680,10 +698,17 @@
       var flipBack = document.createElement('div');
       flipBack.className = 'card-flip-back';
 
+      // Choose back image based on mode
+      var backSrc = is916Mode() ? img.dataset.flipBack : (img.dataset.flipBackDesktop || img.dataset.flipBack);
+
       var backImg = document.createElement('img');
-      backImg.src = img.dataset.flipBack;
+      backImg.src = backSrc;
       backImg.alt = img.alt + ' (back)';
       backImg.loading = 'lazy';
+
+      // Store both back sources for later switching
+      flipBack.dataset.mobileSrc = img.dataset.flipBack;
+      flipBack.dataset.desktopSrc = img.dataset.flipBackDesktop || img.dataset.flipBack;
 
       if (picture) {
         flipFront.appendChild(picture);
@@ -711,8 +736,16 @@
         if (fImg.complete) sizeFlip();
       }
       backImg.addEventListener('load', sizeFlip);
-      window.addEventListener('resize', sizeFlip);
+      window.addEventListener('resize', function() {
+        sizeFlip();
+        // Update back image source on orientation change
+        var newSrc = is916Mode() ? flipBack.dataset.mobileSrc : flipBack.dataset.desktopSrc;
+        if (backImg.src !== newSrc) {
+          backImg.src = newSrc;
+        }
+      });
 
+      // Touch tracking for mobile
       var touchMoved = false;
       cardLink.addEventListener('touchstart', function() {
         touchMoved = false;
@@ -721,8 +754,9 @@
         touchMoved = true;
       }, { passive: true });
 
+      // Tap/click to flip - works in all modes
       cardLink.addEventListener('click', function(e) {
-        if (!is916Mode()) return;
+        if (e.target.closest('.tickets-btn')) return;
         if (touchMoved) return;
         e.preventDefault();
         e.stopPropagation();
@@ -733,7 +767,7 @@
 
   setupFlipCards();
 
-  // Wobble + auto-flip when flippable cards scroll into view
+  // Wobble + auto-flip when flippable cards scroll into view (9:16 mode only)
   window.addEventListener('load', function() {
     if (!is916Mode()) return;
     var triggered = {};
