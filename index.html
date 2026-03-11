@@ -410,25 +410,17 @@ body {
 
 
   /* Landscape lightbox - triggered by JS .landscape-mode class */
-  body.landscape-mode .lightbox-overlay {
-    display: none;
-    position: fixed;
-    inset: 0;
-    background: rgba(0, 0, 0, 0.85);
-    z-index: 1000;
-    overflow-y: scroll;
-    -webkit-overflow-scrolling: touch;
-  }
   body.landscape-mode .lightbox-overlay.active {
-    display: block;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: rgba(0, 0, 0, 0.85);
   }
   body.landscape-mode .lightbox-inner {
-    width: 60vw;
     height: auto;
+    width: 60vw;
     aspect-ratio: auto;
     max-width: none;
-    margin: 3vh auto;
-    position: relative;
   }
   body.landscape-mode .lightbox-overlay img {
     width: 100%;
@@ -547,11 +539,6 @@ body {
       showCard(i);
       overlay.classList.add('active');
       document.body.style.overflow = 'hidden';
-      lightboxImg.addEventListener('load', function scrollReset() {
-        overlay.scrollTop = 0;
-        lightboxImg.removeEventListener('load', scrollReset);
-      }, { once: true });
-      overlay.scrollTop = 0;
     });
   });
 
@@ -565,21 +552,9 @@ body {
     showCard((currentIndex + 1) % cards.length);
   });
 
-  // Track touch movement to distinguish scroll from tap
-  let touchStartY = 0;
-  let touchMoved = false;
-  overlay.addEventListener('touchstart', (e) => {
-    touchStartY = e.touches[0].clientY;
-    touchMoved = false;
-  }, { passive: true });
-  overlay.addEventListener('touchmove', () => {
-    touchMoved = true;
-  }, { passive: true });
-
   overlay.addEventListener('click', (e) => {
     if (e.target.closest('.lightbox-arrow')) return;
     if (e.target.closest('.lightbox-btn')) return;
-    if (touchMoved) { touchMoved = false; return; }
     closeLightbox();
   });
 
