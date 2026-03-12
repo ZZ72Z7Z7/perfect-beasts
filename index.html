@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>PERFECT BEASTS</title>
 <meta property="og:title" content="PERFECT BEASTS">
-<meta property="og:description" content="Modern Bouffon // Northampton Center for the Arts // April 24 &amp; 25 2026">
+<meta property="og:description" content="Modern Bouffon // Northampton Center for the Arts // April 24, 25 2026">
 <meta property="og:type" content="website">
 <meta property="og:image" content="https://perfectbeasts.live/images/PERFECT_BEASTS_1200x600.jpg">
 <meta property="og:image:width" content="1200">
@@ -348,14 +348,14 @@
 <div class="card-grid">
   <div class="card-link">
     <picture>
-      <source media="(max-width: 1200px) and (max-aspect-ratio: 3/4)" srcset="images/card-01_mobile.jpg">
+      <source media="(max-width: 1200px) and (max-aspect-ratio: 3/5)" srcset="images/card-01_mobile.jpg">
       <img src="images/card-01.jpg" alt="Perfect Beasts" width="1200" height="1665">
     </picture>
   </div>
   <div class="card-container">
     <div class="card-link-bg">
       <picture>
-        <source media="(max-width: 1200px) and (max-aspect-ratio: 3/4)" srcset="images/card-02_mobile.jpg">
+        <source media="(max-width: 1200px) and (max-aspect-ratio: 3/5)" srcset="images/card-02_mobile.jpg">
         <img src="images/card-02.jpg" loading="lazy" alt="Modern Bouffon" width="1200" height="1665">
       </picture>
       <a class="tickets-btn" href="https://events.humanitix.com/perfect-beasts-show?h=SiM6BMJovS77kORXZSL4397t2JGi-UL91hsHhQG78Pg&amp;t=1773109967777" target="_blank" rel="noopener">Tickets</a>
@@ -363,41 +363,41 @@
   </div>
   <div class="card-link">
     <picture>
-      <source media="(max-width: 1200px) and (max-aspect-ratio: 3/4)" srcset="images/card-03_mobile.jpg">
+      <source media="(max-width: 1200px) and (max-aspect-ratio: 3/5)" srcset="images/card-03_mobile.jpg">
       <img src="images/card-03.jpg" loading="lazy" alt="Bouffon Info" width="1200" height="1665">
     </picture>
   </div>
   <div class="card-link">
     <picture>
-      <source media="(max-width: 1200px) and (max-aspect-ratio: 3/4)" srcset="images/card-04_mobile_front.jpg">
+      <source media="(max-width: 1200px) and (max-aspect-ratio: 3/5)" srcset="images/card-04_mobile_front.jpg">
       <img src="images/card-04_front.jpg" loading="lazy" alt="Minotaur" data-flip-front="images/card-04_mobile_front.jpg" data-flip-back="images/card-04_mobile_back.jpg" data-flip-back-desktop="images/card-04_back.jpg" width="1200" height="1665">
     </picture>
   </div>
   <div class="card-link">
     <picture>
-      <source media="(max-width: 1200px) and (max-aspect-ratio: 3/4)" srcset="images/card-05_mobile_front.jpg">
+      <source media="(max-width: 1200px) and (max-aspect-ratio: 3/5)" srcset="images/card-05_mobile_front.jpg">
       <img src="images/card-05_front.jpg" loading="lazy" alt="Mimi" data-flip-front="images/card-05_mobile_front.jpg" data-flip-back="images/card-05_mobile_back.jpg" data-flip-back-desktop="images/card-05_back.jpg" width="1200" height="1665">
     </picture>
   </div>
   <div class="card-container">
     <div class="card-link-bg">
       <picture>
-        <source media="(max-width: 1200px) and (max-aspect-ratio: 3/4)" srcset="images/card-06_mobile.jpg">
+        <source media="(max-width: 1200px) and (max-aspect-ratio: 3/5)" srcset="images/card-06_mobile.jpg">
         <img src="images/card-06.jpg" loading="lazy" alt="Workshop" width="1200" height="1665">
       </picture>
       <a class="tickets-btn btn-workshop-info" href="https://events.humanitix.com/perfect-beasts-workshop?h=KWJzFsmMzytsI2L-ip8YO90t5slrTo0ZabbFX4dDF9o&amp;t=1773102944347" target="_blank" rel="noopener">Info & Registration</a>
-      <a class="tickets-btn btn-workshop-contact" href="/cdn-cgi/l/email-protection#d3b1b6a7b6a0a3b2a1b5b2baa7b6a093a3a1bca7bcbdbeb2babffdb0bcbe">Contact</a>
+      <a class="tickets-btn btn-workshop-contact" href="mailto:betesparfaites@protonmail.com">Contact</a>
     </div>
   </div>
 </div>
 
-<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+<script>
   function isMobile() {
     return window.innerWidth <= 1200 && window.innerHeight > window.innerWidth;
   }
 
   function is916Mode() {
-    return window.innerWidth <= 1200 && (window.innerHeight / window.innerWidth) > (4 / 3);
+    return window.innerWidth <= 1200 && (window.innerHeight / window.innerWidth) > (5 / 3);
   }
 
   function isDesktop() {
@@ -575,3 +575,13 @@
             }
           }, 6000);
         });
+      }, { threshold: 0.3 });
+
+      flipInners.forEach(function(inner) {
+        flipObserver.observe(inner);
+      });
+    }
+  });
+</script>
+</body>
+</html>
