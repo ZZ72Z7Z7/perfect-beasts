@@ -34,12 +34,6 @@
     gap: 24px;
   }
 
-  .card-link > picture {
-    display: block;
-    width: 100%;
-    height: 100%;
-  }
-
   .card-link {
     display: block;
     width: calc(50% - 12px);
@@ -104,10 +98,6 @@
     }
     .card-link:hover img {
       transform: none;
-    }
-    .card-link > picture {
-      width: auto;
-      height: auto;
     }
   }
 
@@ -264,7 +254,7 @@
     border: none;
     color: transparent;
     font-size: 0;
-    transition: background 0.2s ease;
+    transition: backdrop-filter 0.2s ease;
   }
 
   .lightbox-btn:hover {
@@ -390,17 +380,6 @@
     transform: scale(1.03);
   }
 
-  @media (max-width: 1200px) {
-    picture img {
-      width: auto;
-      max-width: 95vw;
-      height: auto;
-      max-height: calc(88vh - 20px);
-      display: block;
-      border-radius: 3.5%;
-    }
-  }
-
   /* Landscape lightbox - triggered by JS .landscape-mode class */
   body.landscape-mode .lightbox-overlay.active {
     display: block;
@@ -515,13 +494,13 @@
   <div class="card-link">
     <picture>
       <source media="(max-width: 1200px) and (max-aspect-ratio: 3/4)" srcset="images/card-04_mobile_front.jpg">
-      <img src="images/card-04.jpg" loading="lazy" alt="Minotaur" data-flip-front="images/card-04_mobile_front.jpg" data-flip-back="images/card-04_mobile_back.jpg" width="1200" height="1665">
+      <img src="images/card-04.jpg" loading="lazy" alt="Minotaur" data-flip-front="images/card-04_mobile_front.jpg" data-flip-back="images/card-04_mobile_back.jpg" data-flip-back-57="images/card-04_back.jpg" width="1200" height="1665">
     </picture>
   </div>
   <div class="card-link">
     <picture>
       <source media="(max-width: 1200px) and (max-aspect-ratio: 3/4)" srcset="images/card-05_mobile_front.jpg">
-      <img src="images/card-05.jpg" loading="lazy" alt="Mimi" data-flip-front="images/card-05_mobile_front.jpg" data-flip-back="images/card-05_mobile_back.jpg" width="1200" height="1665">
+      <img src="images/card-05.jpg" loading="lazy" alt="Mimi" data-flip-front="images/card-05_mobile_front.jpg" data-flip-back="images/card-05_mobile_back.jpg" data-flip-back-57="images/card-05_back.jpg" width="1200" height="1665">
     </picture>
   </div>
   <div class="card-container">
@@ -652,8 +631,9 @@
     }
   });
 
+  // Card flip - all mobile portrait modes
   function setupFlipCards() {
-    if (!is916Mode()) return;
+    if (!isMobile()) return;
     var flippableImgs = document.querySelectorAll('img[data-flip-front]');
 
     flippableImgs.forEach(function(img) {
@@ -675,8 +655,11 @@
       var flipBack = document.createElement('div');
       flipBack.className = 'card-flip-back';
 
+      // Choose back image: 9:16 mobile back or 5:7 back
+      var backSrc = is916Mode() ? img.dataset.flipBack : (img.dataset.flipBack57 || img.dataset.flipBack);
+
       var backImg = document.createElement('img');
-      backImg.src = img.dataset.flipBack;
+      backImg.src = backSrc;
       backImg.alt = img.alt + ' (back)';
       backImg.loading = 'lazy';
 
@@ -717,7 +700,7 @@
       }, { passive: true });
 
       cardLink.addEventListener('click', function(e) {
-        if (!is916Mode()) return;
+        if (!isMobile()) return;
         if (touchMoved) return;
         e.preventDefault();
         e.stopPropagation();
@@ -728,8 +711,9 @@
 
   setupFlipCards();
 
+  // Wobble + auto-flip for all mobile portrait modes
   window.addEventListener('load', function() {
-    if (!is916Mode()) return;
+    if (!isMobile()) return;
     var triggered = {};
     var flipInners = document.querySelectorAll('.card-flip-inner');
     if (flipInners.length === 0) return;
@@ -752,11 +736,19 @@
           }, { once: true });
         }, 1000);
 
+        // Auto-flip to back at 3 seconds
         setTimeout(function() {
           if (!el.classList.contains('flipped')) {
             el.classList.add('flipped');
           }
         }, 3000);
+
+        // Auto-flip back to front at 6 seconds
+        setTimeout(function() {
+          if (el.classList.contains('flipped')) {
+            el.classList.remove('flipped');
+          }
+        }, 6000);
       });
     }, { threshold: 0.3 });
 
