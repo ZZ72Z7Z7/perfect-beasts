@@ -477,7 +477,11 @@
       container.appendChild(flipContainer);
 
       function sizeFlip() {
-        if (isDesktop()) return;
+        if (!isMobile()) {
+          flipContainer.style.width = '';
+          flipContainer.style.height = '';
+          return;
+        }
         var frontImg = flipFront.querySelector('img');
         if (frontImg && frontImg.offsetHeight > 0) {
           flipContainer.style.width = frontImg.offsetWidth + 'px';
