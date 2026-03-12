@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>PERFECT BEASTS</title>
 <meta property="og:title" content="PERFECT BEASTS">
-<meta property="og:description" content="Modern Bouffon // Northampton Center for the Arts // April 24, 25 2026">
+<meta property="og:description" content="Modern Bouffon // Northampton Center for the Arts // April 24 &amp; 25 2026">
 <meta property="og:type" content="website">
 <meta property="og:image" content="https://perfectbeasts.live/images/PERFECT_BEASTS_1200x600.jpg">
 <meta property="og:image:width" content="1200">
@@ -386,12 +386,12 @@
         <img src="images/card-06.jpg" loading="lazy" alt="Workshop" width="1200" height="1665">
       </picture>
       <a class="tickets-btn btn-workshop-info" href="https://events.humanitix.com/perfect-beasts-workshop?h=KWJzFsmMzytsI2L-ip8YO90t5slrTo0ZabbFX4dDF9o&amp;t=1773102944347" target="_blank" rel="noopener">Info & Registration</a>
-      <a class="tickets-btn btn-workshop-contact" href="mailto:betesparfaites@protonmail.com">Contact</a>
+      <a class="tickets-btn btn-workshop-contact" href="/cdn-cgi/l/email-protection#294b4c5d4c5a59485b4f48405d4c5a69595b465d464744484045074a4644">Contact</a>
     </div>
   </div>
 </div>
 
-<script>
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
   function isMobile() {
     return window.innerWidth <= 1200 && window.innerHeight > window.innerWidth;
   }
@@ -477,7 +477,7 @@
       container.appendChild(flipContainer);
 
       function sizeFlip() {
-        if (!isMobile()) return;
+        if (isDesktop()) return;
         var frontImg = flipFront.querySelector('img');
         if (frontImg && frontImg.offsetHeight > 0) {
           flipContainer.style.width = frontImg.offsetWidth + 'px';
@@ -575,13 +575,3 @@
             }
           }, 6000);
         });
-      }, { threshold: 0.3 });
-
-      flipInners.forEach(function(inner) {
-        flipObserver.observe(inner);
-      });
-    }
-  });
-</script>
-</body>
-</html>
