@@ -48,6 +48,9 @@
     display: block;
     width: calc(50% - 12px);
     aspect-ratio: 1200 / 1665;
+  }
+
+  .card-link:has(img[data-flip-front]) {
     cursor: pointer;
   }
 
@@ -59,8 +62,6 @@
     filter: var(--card-shadow);
     border-radius: 3.5%;
   }
-
-
 
   @media (max-width: 1200px) {
     body {
@@ -93,13 +94,16 @@
       aspect-ratio: auto;
       cursor: default;
     }
-    .card-link img {
+    .card-link:has(img[data-flip-front]) {
+    cursor: pointer;
+  }
+
+  .card-link img {
       width: auto;
       max-width: 95vw;
       height: auto;
       max-height: calc(88vh - 20px);
       object-fit: contain;
-      transition: none;
       filter: var(--card-shadow);
       border-radius: 3.5%;
     }
@@ -174,7 +178,6 @@
       align-items: center;
       justify-content: center;
       aspect-ratio: auto;
-      transition: none;
       cursor: default;
     }
     .card-container .card-link-bg {
@@ -259,9 +262,6 @@
     object-fit: contain;
     border-radius: 3.5%;
   }
-
-
-
 
   /* Card flip animation */
   .card-flip-container {
@@ -370,13 +370,13 @@
   <div class="card-link">
     <picture>
       <source media="(max-width: 1200px) and (max-aspect-ratio: 3/4)" srcset="images/card-04_mobile_front.jpg">
-      <img src="images/card-04_front.jpg" loading="lazy" alt="Minotaur" data-flip-front="images/card-04_mobile_front.jpg" data-flip-back="images/card-04_mobile_back.jpg" data-flip-back-desktop="images/card-04_back.jpg" data-flip-front-desktop="images/card-04_front.jpg" width="1200" height="1665">
+      <img src="images/card-04_front.jpg" loading="lazy" alt="Minotaur" data-flip-front="images/card-04_mobile_front.jpg" data-flip-back="images/card-04_mobile_back.jpg" data-flip-back-desktop="images/card-04_back.jpg" width="1200" height="1665">
     </picture>
   </div>
   <div class="card-link">
     <picture>
       <source media="(max-width: 1200px) and (max-aspect-ratio: 3/4)" srcset="images/card-05_mobile_front.jpg">
-      <img src="images/card-05_front.jpg" loading="lazy" alt="Mimi" data-flip-front="images/card-05_mobile_front.jpg" data-flip-back="images/card-05_mobile_back.jpg" data-flip-back-desktop="images/card-05_back.jpg" data-flip-front-desktop="images/card-05_front.jpg" width="1200" height="1665">
+      <img src="images/card-05_front.jpg" loading="lazy" alt="Mimi" data-flip-front="images/card-05_mobile_front.jpg" data-flip-back="images/card-05_mobile_back.jpg" data-flip-back-desktop="images/card-05_back.jpg" width="1200" height="1665">
     </picture>
   </div>
   <div class="card-container">
@@ -476,7 +476,6 @@
       flipContainer.appendChild(flipInner);
       container.appendChild(flipContainer);
 
-      // Only set explicit sizes on mobile; desktop uses CSS 100%
       function sizeFlip() {
         if (!isMobile()) return;
         var frontImg = flipFront.querySelector('img');
