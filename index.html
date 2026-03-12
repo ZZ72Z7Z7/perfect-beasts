@@ -494,13 +494,13 @@
   <div class="card-link">
     <picture>
       <source media="(max-width: 1200px) and (max-aspect-ratio: 3/4)" srcset="images/card-04_mobile_front.jpg">
-      <img src="images/card-04.jpg" loading="lazy" alt="Minotaur" data-flip-front="images/card-04_mobile_front.jpg" data-flip-back="images/card-04_mobile_back.jpg" data-flip-back-57="images/card-04_back.jpg" width="1200" height="1665">
+      <img src="images/card-04.jpg" loading="lazy" alt="Minotaur" data-flip-front="images/card-04_mobile_front.jpg" data-flip-back="images/card-04_mobile_back.jpg" data-flip-back-desktop="images/card-04_back.jpg" width="1200" height="1665">
     </picture>
   </div>
   <div class="card-link">
     <picture>
       <source media="(max-width: 1200px) and (max-aspect-ratio: 3/4)" srcset="images/card-05_mobile_front.jpg">
-      <img src="images/card-05.jpg" loading="lazy" alt="Mimi" data-flip-front="images/card-05_mobile_front.jpg" data-flip-back="images/card-05_mobile_back.jpg" data-flip-back-57="images/card-05_back.jpg" width="1200" height="1665">
+      <img src="images/card-05.jpg" loading="lazy" alt="Mimi" data-flip-front="images/card-05_mobile_front.jpg" data-flip-back="images/card-05_mobile_back.jpg" data-flip-back-desktop="images/card-05_back.jpg" width="1200" height="1665">
     </picture>
   </div>
   <div class="card-container">
@@ -656,7 +656,7 @@
       flipBack.className = 'card-flip-back';
 
       // Choose back image: 9:16 mobile back or 5:7 back
-      var backSrc = is916Mode() ? img.dataset.flipBack : (img.dataset.flipBack57 || img.dataset.flipBack);
+      var backSrc = is916Mode() ? img.dataset.flipBack : (img.dataset.flipBackDesktop || img.dataset.flipBack);
 
       var backImg = document.createElement('img');
       backImg.src = backSrc;
