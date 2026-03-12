@@ -296,6 +296,12 @@
     -webkit-backface-visibility: hidden;
   }
 
+  .card-flip-front picture {
+    display: block;
+    width: 100%;
+    height: 100%;
+  }
+
   .card-flip-back {
     transform: rotateY(180deg);
   }
@@ -317,6 +323,10 @@
       max-width: 95vw;
       height: auto;
       max-height: calc(88vh - 20px);
+    }
+    .card-flip-front picture {
+      width: auto;
+      height: auto;
     }
   }
 
@@ -409,7 +419,6 @@
 
   var grid = document.querySelector('.card-grid');
 
-  // Bounce hint on mobile
   window.addEventListener('load', function() {
     if (isMobile()) {
       setTimeout(function() {
@@ -421,7 +430,6 @@
     }
   });
 
-  // Card flip - all modes
   function setupFlipCards() {
     var flippableImgs = document.querySelectorAll('img[data-flip-front]');
 
@@ -444,12 +452,9 @@
       var flipBack = document.createElement('div');
       flipBack.className = 'card-flip-back';
 
-      // Choose back image based on mode
       var backSrc;
       if (is916Mode()) {
         backSrc = img.dataset.flipBack;
-      } else if (isMobile()) {
-        backSrc = img.dataset.flipBackDesktop || img.dataset.flipBack;
       } else {
         backSrc = img.dataset.flipBackDesktop || img.dataset.flipBack;
       }
@@ -471,7 +476,9 @@
       flipContainer.appendChild(flipInner);
       container.appendChild(flipContainer);
 
+      // Only set explicit sizes on mobile; desktop uses CSS 100%
       function sizeFlip() {
+        if (!isMobile()) return;
         var frontImg = flipFront.querySelector('img');
         if (frontImg && frontImg.offsetHeight > 0) {
           flipContainer.style.width = frontImg.offsetWidth + 'px';
@@ -487,7 +494,6 @@
       backImg.addEventListener('load', sizeFlip);
       window.addEventListener('resize', sizeFlip);
 
-      // Touch tracking for mobile
       var touchMoved = false;
       cardLink.addEventListener('touchstart', function() {
         touchMoved = false;
@@ -496,13 +502,11 @@
         touchMoved = true;
       }, { passive: true });
 
-      // Click to flip
       cardLink.addEventListener('click', function(e) {
         if (touchMoved) return;
         e.preventDefault();
         e.stopPropagation();
         flipInner.classList.toggle('flipped');
-        // Cancel auto-flip on any manual interaction
         window.autoFlipCancelled = true;
       });
     });
@@ -510,18 +514,12 @@
 
   setupFlipCards();
 
-  // Auto-flip behavior
   window.addEventListener('load', function() {
     window.autoFlipCancelled = false;
     var flipInners = document.querySelectorAll('.card-flip-inner');
     if (flipInners.length === 0) return;
 
     if (isDesktop()) {
-      // Desktop: staggered sequence for both cards
-      // 3s: card 4 flips to back
-      // 6s: card 5 flips to back
-      // 9s: card 4 flips to front
-      // 12s: card 5 flips to front
       var card4 = flipInners[0];
       var card5 = flipInners[1];
 
@@ -546,7 +544,6 @@
       }, 12000);
 
     } else if (isMobile()) {
-      // Mobile: wobble + auto-flip triggered by scroll into view
       var triggered = {};
 
       var flipObserver = new IntersectionObserver(function(entries) {
