@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>PERFECT BEASTS</title>
 <meta property="og:title" content="PERFECT BEASTS">
-<meta property="og:description" content="Modern Bouffon // Northampton Center for the Arts // April 24 &amp; 25 2026">
+<meta property="og:description" content="Modern Bouffon // Northampton Center for the Arts // April 24 &amp; 25, 2026">
 <meta property="og:type" content="website">
 <meta property="og:image" content="https://perfectbeasts.live/images/PERFECT_BEASTS_1200x600.jpg">
 <meta property="og:image:width" content="1200">
@@ -13,11 +13,11 @@
 <meta property="og:url" content="https://perfectbeasts.live/">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="PERFECT BEASTS">
-<meta name="twitter:description" content="Modern Bouffon // Northampton Center for the Arts // April 24 &amp; 25 2026">
+<meta name="twitter:description" content="Modern Bouffon // Northampton Center for the Arts // April 24 &amp; 25, 2026">
 <meta name="twitter:image" content="https://perfectbeasts.live/images/PERFECT_BEASTS_1200x600.jpg">
 <meta name="theme-color" content="#7a6450">
 <link rel="icon" href="favicon.ico">
-<meta name="description" content="PERFECT BEASTS: Modern Bouffon at Northampton Center for the Arts, April 24 &amp; 25 2026">
+<meta name="description" content="PERFECT BEASTS: Modern Bouffon at Northampton Center for the Arts, April 24 &amp; 25, 2026">
 <style>
   * { margin: 0; padding: 0; box-sizing: border-box; }
 
@@ -434,17 +434,6 @@
 
   var grid = document.querySelector('.card-grid');
 
-  window.addEventListener('load', function() {
-    if (isMobile()) {
-      setTimeout(function() {
-        grid.scrollTo({ top: 60, behavior: 'smooth' });
-        setTimeout(function() {
-          grid.scrollTo({ top: 0, behavior: 'smooth' });
-        }, 400);
-      }, 800);
-    }
-  });
-
   function setupFlipCards() {
     var flippableImgs = document.querySelectorAll('img[data-flip-front]');
 
@@ -561,7 +550,7 @@
         card5.classList.remove('flipped');
       }, 12000);
 
-    } else if (isMobile()) {
+    } else {
       var triggered = {};
 
       var flipObserver = new IntersectionObserver(function(entries) {
