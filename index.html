@@ -74,7 +74,7 @@
       overflow-y: auto;
       overflow-x: hidden;
       scroll-snap-type: y mandatory;
-      padding: 6vh 0;
+      padding: 3vh 0;
       gap: 0;
       height: 100vh;
       max-width: 100vw;
@@ -84,9 +84,9 @@
       display: none;
     }
     .card-link {
-      flex: 0 0 88vh;
+      flex: 0 0 94vh;
       width: 100vw;
-      height: 88vh;
+      height: 94vh;
       scroll-snap-align: center;
       display: flex;
       align-items: center;
@@ -102,7 +102,7 @@
       width: auto;
       max-width: 95vw;
       height: auto;
-      max-height: calc(88vh - 20px);
+      max-height: calc(94vh - 20px);
       object-fit: contain;
       filter: var(--card-shadow);
       border-radius: 3.5%;
@@ -170,9 +170,9 @@
 
   @media (max-width: 1200px) {
     .card-container {
-      flex: 0 0 88vh;
+      flex: 0 0 94vh;
       width: 100vw;
-      height: 88vh;
+      height: 94vh;
       scroll-snap-align: center;
       display: flex;
       align-items: center;
@@ -190,7 +190,7 @@
       width: auto;
       max-width: 95vw;
       height: auto;
-      max-height: calc(88vh - 20px);
+      max-height: calc(94vh - 20px);
       display: block;
       filter: var(--card-shadow);
     }
@@ -322,7 +322,7 @@
       width: auto;
       max-width: 95vw;
       height: auto;
-      max-height: calc(88vh - 20px);
+      max-height: calc(94vh - 20px);
     }
     .card-flip-front picture {
       width: auto;
@@ -386,12 +386,12 @@
         <img src="images/card-06.jpg" loading="lazy" alt="Workshop" width="1200" height="1665">
       </picture>
       <a class="tickets-btn btn-workshop-info" href="https://events.humanitix.com/perfect-beasts-workshop?h=KWJzFsmMzytsI2L-ip8YO90t5slrTo0ZabbFX4dDF9o&amp;t=1773102944347" target="_blank" rel="noopener">Info & Registration</a>
-      <a class="tickets-btn btn-workshop-contact" href="mailto:betesparfaites@protonmail.com">Contact</a>
+      <a class="tickets-btn btn-workshop-contact" href="/cdn-cgi/l/email-protection#d3b1b6a7b6a0a3b2a1b5b2baa7b6a093a3a1bca7bcbdbeb2babffdb0bcbe">Contact</a>
     </div>
   </div>
 </div>
 
-<script>
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
   function isMobile() {
     return window.innerWidth <= 1200 && window.innerHeight > window.innerWidth;
   }
@@ -575,13 +575,3 @@
             }
           }, 6000);
         });
-      }, { threshold: 0.3 });
-
-      flipInners.forEach(function(inner) {
-        flipObserver.observe(inner);
-      });
-    }
-  });
-</script>
-</body>
-</html>
