@@ -480,27 +480,6 @@
       flipContainer.appendChild(flipInner);
       container.appendChild(flipContainer);
 
-      function sizeFlip() {
-        if (!isMobile()) {
-          flipContainer.style.width = '';
-          flipContainer.style.height = '';
-          return;
-        }
-        var frontImg = flipFront.querySelector('img');
-        if (frontImg && frontImg.offsetHeight > 0) {
-          flipContainer.style.width = frontImg.offsetWidth + 'px';
-          flipContainer.style.height = frontImg.offsetHeight + 'px';
-        }
-      }
-
-      var fImg = flipFront.querySelector('img');
-      if (fImg) {
-        fImg.addEventListener('load', sizeFlip);
-        if (fImg.complete) sizeFlip();
-      }
-      backImg.addEventListener('load', sizeFlip);
-      window.addEventListener('resize', sizeFlip);
-
       var touchMoved = false;
       cardLink.addEventListener('touchstart', function() {
         touchMoved = false;
