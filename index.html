@@ -17,6 +17,7 @@
 <meta name="twitter:image" content="https://perfectbeasts.live/images/PERFECT_BEASTS_1200x600.jpg">
 <meta name="theme-color" content="#7a6450">
 <link rel="icon" href="favicon.ico">
+<script src="https://player.vimeo.com/api/player.js"></script>
 <meta name="description" content="PERFECT BEASTS: Modern Bouffon at Northampton Center for the Arts, April 24 &amp; 25, 2026">
 <style>
   * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -50,10 +51,6 @@
     aspect-ratio: 1200 / 1665;
   }
 
-  .card-link:has(img[data-flip-front]) {
-    cursor: pointer;
-  }
-
   .card-link img {
     width: 100%;
     height: 100%;
@@ -74,7 +71,7 @@
       overflow-y: auto;
       overflow-x: hidden;
       scroll-snap-type: y mandatory;
-      padding: 3vh 0;
+      padding: 1.5vh 0;
       gap: 0;
       height: 100vh;
       max-width: 100vw;
@@ -84,9 +81,9 @@
       display: none;
     }
     .card-link {
-      flex: 0 0 94vh;
+      flex: 0 0 97vh;
       width: 100vw;
-      height: 94vh;
+      height: 97vh;
       scroll-snap-align: center;
       display: flex;
       align-items: center;
@@ -94,14 +91,11 @@
       aspect-ratio: auto;
       cursor: default;
     }
-    .card-link:has(img[data-flip-front]) {
-      cursor: pointer;
-    }
     .card-link img {
       width: auto;
       max-width: 95vw;
       height: auto;
-      max-height: calc(94vh - 20px);
+      max-height: 97vh;
       object-fit: contain;
       filter: var(--card-shadow);
       border-radius: 3.5%;
@@ -169,9 +163,9 @@
 
   @media (max-width: 1200px) {
     .card-container {
-      flex: 0 0 94vh;
+      flex: 0 0 97vh;
       width: 100vw;
-      height: 94vh;
+      height: 97vh;
       scroll-snap-align: center;
       display: flex;
       align-items: center;
@@ -189,7 +183,7 @@
       width: auto;
       max-width: 95vw;
       height: auto;
-      max-height: calc(94vh - 20px);
+      max-height: 97vh;
       display: block;
       filter: var(--card-shadow);
     }
@@ -336,7 +330,7 @@
       width: auto;
       max-width: 95vw;
       height: auto;
-      max-height: calc(94vh - 20px);
+      max-height: 97vh;
     }
     .card-flip-front picture {
       width: auto;
@@ -344,23 +338,35 @@
     }
   }
 
-  @keyframes card-wobble {
-    0% { transform: rotateY(0deg); }
-    25% { transform: rotateY(4deg); }
-    50% { transform: rotateY(-3deg); }
-    75% { transform: rotateY(2deg); }
-    100% { transform: rotateY(0deg); }
+
+  .card-video-flip {
+    cursor: pointer;
   }
 
-  .card-flip-inner.wobble {
-    animation: card-wobble 0.6s ease;
+  .video-click-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 85%;
+    z-index: 10;
+    cursor: pointer;
+  }
+
+  .card-flip-back .video-wrapper {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    background: #000;
+    border-radius: 3.5%;
+    overflow: hidden;
   }
 
 </style>
 </head>
 <body>
 <div class="card-grid">
-  <div class="card-link">
+  <div class="card-link card-video-flip" id="card-video">
     <picture>
       <source media="(max-width: 1200px) and (max-aspect-ratio: 3/5)" srcset="images/card-01_mobile.jpg">
       <img src="images/card-01.jpg" alt="Perfect Beasts" width="1200" height="1665">
@@ -378,13 +384,13 @@
   <div class="card-link">
     <picture>
       <source media="(max-width: 1200px) and (max-aspect-ratio: 3/5)" srcset="images/card-04_mobile_front.jpg">
-      <img src="images/card-04_front.jpg" loading="lazy" alt="Minotaur" data-flip-front="images/card-04_mobile_front.jpg" data-flip-back="images/card-04_mobile_back.jpg" data-flip-back-desktop="images/card-04_back.jpg" width="1200" height="1665">
+      <img src="images/card-04_front.jpg" loading="lazy" alt="Minotaur" width="1200" height="1665">
     </picture>
   </div>
   <div class="card-link">
     <picture>
       <source media="(max-width: 1200px) and (max-aspect-ratio: 3/5)" srcset="images/card-05_mobile_front.jpg">
-      <img src="images/card-05_front.jpg" loading="lazy" alt="Mimi" data-flip-front="images/card-05_mobile_front.jpg" data-flip-back="images/card-05_mobile_back.jpg" data-flip-back-desktop="images/card-05_back.jpg" width="1200" height="1665">
+      <img src="images/card-05_front.jpg" loading="lazy" alt="Mimi" width="1200" height="1665">
     </picture>
   </div>
   <div class="card-link">
@@ -444,161 +450,146 @@
     }
   });
 
-  function setupFlipCards() {
-    var flippableImgs = document.querySelectorAll('img[data-flip-front]');
+  function setupVideoCard() {
+    var videoCard = document.getElementById('card-video');
+    if (!videoCard) return;
 
-    flippableImgs.forEach(function(img) {
-      var cardLink = img.closest('.card-link');
-      if (!cardLink) return;
+    var picture = videoCard.querySelector('picture');
+    var container = picture ? picture.parentElement : videoCard;
 
-      var picture = img.closest('picture');
-      var container = picture ? picture.parentElement : img.parentElement;
+    var flipContainer = document.createElement('div');
+    flipContainer.className = 'card-flip-container';
 
-      var flipContainer = document.createElement('div');
-      flipContainer.className = 'card-flip-container';
+    var flipInner = document.createElement('div');
+    flipInner.className = 'card-flip-inner';
 
-      var flipInner = document.createElement('div');
-      flipInner.className = 'card-flip-inner';
+    var flipFront = document.createElement('div');
+    flipFront.className = 'card-flip-front';
 
-      var flipFront = document.createElement('div');
-      flipFront.className = 'card-flip-front';
+    var flipBack = document.createElement('div');
+    flipBack.className = 'card-flip-back';
 
-      var flipBack = document.createElement('div');
-      flipBack.className = 'card-flip-back';
+    var videoWrapper = document.createElement('div');
+    videoWrapper.className = 'video-wrapper';
 
-      var backSrc;
-      if (is916Mode()) {
-        backSrc = img.dataset.flipBack;
-      } else {
-        backSrc = img.dataset.flipBackDesktop || img.dataset.flipBack;
+    var videoSrc;
+    if (is916Mode()) {
+      videoSrc = 'https://player.vimeo.com/video/1178912129?h=9f7ede004c&badge=0&autopause=0&player_id=0&app_id=58479&autoplay=0&muted=1&loop=1&title=0&byline=0&portrait=0';
+    } else {
+      videoSrc = 'https://player.vimeo.com/video/1179435831?badge=0&autopause=0&player_id=0&app_id=58479&autoplay=0&muted=1&loop=1&title=0&byline=0&portrait=0';
+    }
+
+    var iframe = document.createElement('iframe');
+    iframe.src = videoSrc;
+    iframe.allow = 'autoplay; fullscreen; picture-in-picture; clipboard-write; encrypted-media; web-share';
+    iframe.referrerPolicy = 'strict-origin-when-cross-origin';
+    iframe.title = 'PERFECT BEASTS';
+    iframe.style.cssText = 'position:absolute;top:0;left:0;width:100%;height:100%;border:none;';
+
+    var clickOverlay = document.createElement('div');
+    clickOverlay.className = 'video-click-overlay';
+
+    videoWrapper.appendChild(iframe);
+    videoWrapper.appendChild(clickOverlay);
+
+    if (picture) {
+      flipFront.appendChild(picture);
+    }
+
+    flipBack.appendChild(videoWrapper);
+    flipInner.appendChild(flipFront);
+    flipInner.appendChild(flipBack);
+    flipContainer.appendChild(flipInner);
+    container.appendChild(flipContainer);
+
+    function sizeFlip() {
+      if (!isMobile()) {
+        flipContainer.style.width = '';
+        flipContainer.style.height = '';
+        return;
       }
-
-      var backImg = document.createElement('img');
-      backImg.src = backSrc;
-      backImg.alt = img.alt + ' (back)';
-      backImg.loading = 'lazy';
-
-      if (picture) {
-        flipFront.appendChild(picture);
-      } else {
-        flipFront.appendChild(img);
+      var frontImg = flipFront.querySelector('img');
+      if (frontImg && frontImg.offsetHeight > 0) {
+        flipContainer.style.width = frontImg.offsetWidth + 'px';
+        flipContainer.style.height = frontImg.offsetHeight + 'px';
       }
+    }
 
-      flipBack.appendChild(backImg);
-      flipInner.appendChild(flipFront);
-      flipInner.appendChild(flipBack);
-      flipContainer.appendChild(flipInner);
-      container.appendChild(flipContainer);
+    var fImg = flipFront.querySelector('img');
+    if (fImg) {
+      fImg.addEventListener('load', sizeFlip);
+      if (fImg.complete) sizeFlip();
+    }
+    window.addEventListener('resize', sizeFlip);
 
-      function sizeFlip() {
-        if (!isMobile()) {
-          flipContainer.style.width = '';
-          flipContainer.style.height = '';
-          return;
-        }
-        var frontImg = flipFront.querySelector('img');
-        if (frontImg && frontImg.offsetHeight > 0) {
-          flipContainer.style.width = frontImg.offsetWidth + 'px';
-          flipContainer.style.height = frontImg.offsetHeight + 'px';
-        }
-      }
+    var player = new Vimeo.Player(iframe);
 
-      var fImg = flipFront.querySelector('img');
-      if (fImg) {
-        fImg.addEventListener('load', sizeFlip);
-        if (fImg.complete) sizeFlip();
-      }
-      backImg.addEventListener('load', sizeFlip);
-      window.addEventListener('resize', sizeFlip);
+    videoCard._flipInner = flipInner;
+    videoCard._player = player;
 
-      var touchMoved = false;
-      cardLink.addEventListener('touchstart', function() {
-        touchMoved = false;
-      }, { passive: true });
-      cardLink.addEventListener('touchmove', function() {
-        touchMoved = true;
-      }, { passive: true });
+    function flipToVideo() {
+      flipInner.classList.add('flipped');
+      player.setCurrentTime(0);
+      player.play();
+    }
 
-      cardLink.addEventListener('click', function(e) {
-        if (touchMoved) return;
+    function flipToFront() {
+      flipInner.classList.remove('flipped');
+      player.pause();
+      player.setCurrentTime(0);
+    }
+
+    videoCard._flipToFront = flipToFront;
+
+    var touchMoved = false;
+    videoCard.addEventListener('touchstart', function() {
+      touchMoved = false;
+    }, { passive: true });
+    videoCard.addEventListener('touchmove', function() {
+      touchMoved = true;
+    }, { passive: true });
+
+    videoCard.addEventListener('click', function(e) {
+      if (touchMoved) return;
+      if (e.target.closest('.video-click-overlay')) return;
+      if (!flipInner.classList.contains('flipped')) {
         e.preventDefault();
         e.stopPropagation();
-        flipInner.classList.toggle('flipped');
-        window.autoFlipCancelled = true;
+        flipToVideo();
+      }
+    });
+
+    clickOverlay.addEventListener('click', function(e) {
+      e.preventDefault();
+      e.stopPropagation();
+      flipToFront();
+    });
+
+    window.addEventListener('load', function() {
+      setTimeout(function() {
+        player.play();
+      }, 2000);
+
+      player.on('playing', function onFirstPlay() {
+        flipInner.classList.add('flipped');
+        player.off('playing', onFirstPlay);
       });
+
+      setTimeout(function() {
+        flipToFront();
+      }, 47000);
     });
   }
 
-  setupFlipCards();
+  setupVideoCard();
 
-  window.addEventListener('load', function() {
-    window.autoFlipCancelled = false;
-    var flipInners = document.querySelectorAll('.card-flip-inner');
-    if (flipInners.length === 0) return;
-
-    if (isDesktop()) {
-      var card4 = flipInners[0];
-      var card5 = flipInners[1];
-
-      setTimeout(function() {
-        if (window.autoFlipCancelled) return;
-        card4.classList.add('flipped');
-      }, 3000);
-
-      setTimeout(function() {
-        if (window.autoFlipCancelled) return;
-        card5.classList.add('flipped');
-      }, 6000);
-
-      setTimeout(function() {
-        if (window.autoFlipCancelled) return;
-        card4.classList.remove('flipped');
-      }, 9000);
-
-      setTimeout(function() {
-        if (window.autoFlipCancelled) return;
-        card5.classList.remove('flipped');
-      }, 12000);
-
-    } else if (isMobile()) {
-      var triggered = {};
-
-      var flipObserver = new IntersectionObserver(function(entries) {
-        entries.forEach(function(entry) {
-          if (!entry.isIntersecting) return;
-          var el = entry.target;
-          var cardLink = el.closest('.card-link');
-          if (!cardLink) return;
-          var img = cardLink.querySelector('img');
-          var id = img ? img.alt : '';
-          if (triggered[id]) return;
-          triggered[id] = true;
-
-          setTimeout(function() {
-            el.classList.add('wobble');
-            el.addEventListener('animationend', function() {
-              el.classList.remove('wobble');
-            }, { once: true });
-          }, 1000);
-
-          setTimeout(function() {
-            if (!el.classList.contains('flipped')) {
-              el.classList.add('flipped');
-            }
-          }, 3000);
-
-          setTimeout(function() {
-            if (el.classList.contains('flipped')) {
-              el.classList.remove('flipped');
-            }
-          }, 6000);
-        });
-      }, { threshold: 0.3 });
-
-      flipInners.forEach(function(inner) {
-        flipObserver.observe(inner);
-      });
-    }
+  document.addEventListener('click', function(e) {
+    var videoCard = document.getElementById('card-video');
+    if (!videoCard || !videoCard._flipInner) return;
+    if (!videoCard._flipInner.classList.contains('flipped')) return;
+    if (e.target.closest('.video-click-overlay')) return;
+    if (e.target.closest('#card-video')) return;
+    videoCard._flipToFront();
   });
 </script>
 </body>
