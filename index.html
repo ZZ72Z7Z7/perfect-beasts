@@ -520,6 +520,12 @@
     videoCard._flipInner = flipInner;
     videoCard._player = player;
 
+    // Lock all flip interactions for first 5 seconds
+    var flipLocked = true;
+    setTimeout(function() {
+      flipLocked = false;
+    }, 5000);
+
     function flipToVideo() {
       flipInner.classList.add('flipped');
       player.setCurrentTime(0);
@@ -527,6 +533,7 @@
     }
 
     function flipToFront() {
+      if (flipLocked) return;
       flipInner.classList.remove('flipped');
       player.pause();
       player.setCurrentTime(0);
@@ -569,6 +576,7 @@
     // Auto-flip to front after 45 seconds
     setTimeout(function() {
       if (flipInner.classList.contains('flipped')) {
+        flipLocked = false;
         flipToFront();
       }
     }, 45000);
