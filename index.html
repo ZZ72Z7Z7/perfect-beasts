@@ -558,6 +558,7 @@
       flipToFront();
     });
 
+    // Scroll lock for first 5 seconds on mobile
     if (isMobile()) {
       grid.classList.add('scroll-locked');
       setTimeout(function() {
@@ -565,15 +566,28 @@
       }, 5000);
     }
 
+    // Auto-flip to front after 45 seconds
     setTimeout(function() {
       if (flipInner.classList.contains('flipped')) {
         flipToFront();
       }
     }, 45000);
+
+    // Flip to front when card scrolls out of view
+    var scrollObserver = new IntersectionObserver(function(entries) {
+      entries.forEach(function(entry) {
+        if (!entry.isIntersecting && flipInner.classList.contains('flipped')) {
+          flipToFront();
+        }
+      });
+    }, { threshold: 0.3 });
+
+    scrollObserver.observe(videoCard);
   }
 
   setupVideoCard();
 
+  // Click anywhere outside Vimeo controls flips video card back
   document.addEventListener('click', function(e) {
     var videoCard = document.getElementById('card-video');
     if (!videoCard || !videoCard._flipInner) return;
