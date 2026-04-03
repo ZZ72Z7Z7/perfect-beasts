@@ -345,10 +345,10 @@
 
   .video-click-overlay {
     position: absolute;
-    top: 0;
+    top: 15%;
     left: 0;
     width: 100%;
-    height: 85%;
+    height: 70%;
     z-index: 10;
     cursor: pointer;
   }
@@ -558,7 +558,6 @@
       flipToFront();
     });
 
-    // Scroll lock for first 5 seconds on mobile
     if (isMobile()) {
       grid.classList.add('scroll-locked');
       setTimeout(function() {
@@ -566,7 +565,6 @@
       }, 5000);
     }
 
-    // Auto-flip to front after 45 seconds of video
     setTimeout(function() {
       if (flipInner.classList.contains('flipped')) {
         flipToFront();
@@ -576,7 +574,6 @@
 
   setupVideoCard();
 
-  // Click anywhere outside Vimeo controls flips video card back
   document.addEventListener('click', function(e) {
     var videoCard = document.getElementById('card-video');
     if (!videoCard || !videoCard._flipInner) return;
