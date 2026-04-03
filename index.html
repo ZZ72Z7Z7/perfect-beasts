@@ -362,6 +362,10 @@
     overflow: hidden;
   }
 
+  .scroll-locked {
+    overflow: hidden !important;
+  }
+
 </style>
 </head>
 <body>
@@ -439,17 +443,6 @@
 
   var grid = document.querySelector('.card-grid');
 
-  window.addEventListener('load', function() {
-    if (isMobile()) {
-      setTimeout(function() {
-        grid.scrollTo({ top: 60, behavior: 'smooth' });
-        setTimeout(function() {
-          grid.scrollTo({ top: 0, behavior: 'smooth' });
-        }, 400);
-      }, 800);
-    }
-  });
-
   function setupVideoCard() {
     var videoCard = document.getElementById('card-video');
     if (!videoCard) return;
@@ -461,7 +454,7 @@
     flipContainer.className = 'card-flip-container';
 
     var flipInner = document.createElement('div');
-    flipInner.className = 'card-flip-inner';
+    flipInner.className = 'card-flip-inner flipped';
 
     var flipFront = document.createElement('div');
     flipFront.className = 'card-flip-front';
@@ -474,9 +467,9 @@
 
     var videoSrc;
     if (is916Mode()) {
-      videoSrc = 'https://player.vimeo.com/video/1178912129?h=9f7ede004c&badge=0&autopause=0&player_id=0&app_id=58479&autoplay=0&muted=1&loop=1&title=0&byline=0&portrait=0';
+      videoSrc = 'https://player.vimeo.com/video/1178912129?h=9f7ede004c&badge=0&autopause=0&player_id=0&app_id=58479&autoplay=1&muted=1&loop=1&title=0&byline=0&portrait=0';
     } else {
-      videoSrc = 'https://player.vimeo.com/video/1179435831?badge=0&autopause=0&player_id=0&app_id=58479&autoplay=0&muted=1&loop=1&title=0&byline=0&portrait=0';
+      videoSrc = 'https://player.vimeo.com/video/1179435831?badge=0&autopause=0&player_id=0&app_id=58479&autoplay=1&muted=1&loop=1&title=0&byline=0&portrait=0';
     }
 
     var iframe = document.createElement('iframe');
@@ -565,24 +558,25 @@
       flipToFront();
     });
 
-    window.addEventListener('load', function() {
+    // Scroll lock for first 5 seconds on mobile
+    if (isMobile()) {
+      grid.classList.add('scroll-locked');
       setTimeout(function() {
-        player.play();
-      }, 2000);
+        grid.classList.remove('scroll-locked');
+      }, 5000);
+    }
 
-      player.on('playing', function onFirstPlay() {
-        flipInner.classList.add('flipped');
-        player.off('playing', onFirstPlay);
-      });
-
-      setTimeout(function() {
+    // Auto-flip to front after 45 seconds of video
+    setTimeout(function() {
+      if (flipInner.classList.contains('flipped')) {
         flipToFront();
-      }, 47000);
-    });
+      }
+    }, 45000);
   }
 
   setupVideoCard();
 
+  // Click anywhere outside Vimeo controls flips video card back
   document.addEventListener('click', function(e) {
     var videoCard = document.getElementById('card-video');
     if (!videoCard || !videoCard._flipInner) return;
