@@ -410,7 +410,7 @@
         <img src="images/card-06.jpg" loading="lazy" alt="Workshop" width="1200" height="1665">
       </picture>
       <a class="tickets-btn btn-workshop-info" href="https://events.humanitix.com/perfect-beasts-workshop?h=KWJzFsmMzytsI2L-ip8YO90t5slrTo0ZabbFX4dDF9o&amp;t=1773102944347" target="_blank" rel="noopener">Info & Registration</a>
-      <a class="tickets-btn btn-workshop-contact" href="mailto:betesparfaites@protonmail.com">Contact</a>
+      <a class="tickets-btn btn-workshop-contact" href="mailto:joshua@perfectbeasts.live">Contact</a>
     </div>
   </div>
 </div>
@@ -520,7 +520,6 @@
     videoCard._flipInner = flipInner;
     videoCard._player = player;
 
-    // Lock all flip interactions for first 5 seconds
     var flipLocked = true;
     setTimeout(function() {
       flipLocked = false;
@@ -565,7 +564,6 @@
       flipToFront();
     });
 
-    // Scroll lock for first 5 seconds on mobile
     if (isMobile()) {
       grid.classList.add('scroll-locked');
       setTimeout(function() {
@@ -573,7 +571,6 @@
       }, 5000);
     }
 
-    // Auto-flip to front after 45 seconds
     setTimeout(function() {
       if (flipInner.classList.contains('flipped')) {
         flipLocked = false;
@@ -581,7 +578,6 @@
       }
     }, 45000);
 
-    // Flip to front when card scrolls out of view
     var scrollObserver = new IntersectionObserver(function(entries) {
       entries.forEach(function(entry) {
         if (!entry.isIntersecting && flipInner.classList.contains('flipped')) {
@@ -595,7 +591,6 @@
 
   setupVideoCard();
 
-  // Click anywhere outside Vimeo controls flips video card back
   document.addEventListener('click', function(e) {
     var videoCard = document.getElementById('card-video');
     if (!videoCard || !videoCard._flipInner) return;
