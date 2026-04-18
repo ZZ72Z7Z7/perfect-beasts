@@ -21,11 +21,9 @@
 <meta name="description" content="PERFECT BEASTS: Modern Bouffon at Northampton Center for the Arts, April 24 &amp; 25, 2026">
 <style>
   * { margin: 0; padding: 0; box-sizing: border-box; }
-
   :root {
     --card-shadow: drop-shadow(0 3px 5px rgba(0,0,0,0.165)) drop-shadow(0 9px 18px rgba(0,0,0,0.113));
   }
-
   body {
     min-height: 100vh;
     display: flex;
@@ -35,7 +33,6 @@
     background-size: 800px;
     background-repeat: repeat;
   }
-
   .card-grid {
     display: flex;
     flex-wrap: wrap;
@@ -44,13 +41,11 @@
     padding: 60px;
     gap: 24px;
   }
-
   .card-link {
     display: block;
     width: calc(50% - 12px);
     aspect-ratio: 1200 / 1665;
   }
-
   .card-link img {
     width: 100%;
     height: 100%;
@@ -59,7 +54,6 @@
     filter: var(--card-shadow);
     border-radius: 3.5%;
   }
-
   @media (max-width: 1200px) {
     body {
       overflow: hidden;
@@ -71,7 +65,7 @@
       overflow-y: auto;
       overflow-x: hidden;
       scroll-snap-type: y mandatory;
-      padding: 1.5vh 0;
+      padding: 0;
       gap: 0;
       height: 100vh;
       max-width: 100vw;
@@ -81,9 +75,10 @@
       display: none;
     }
     .card-link {
-      flex: 0 0 97vh;
+      flex: 0 0 auto;
       width: 100vw;
-      height: 97vh;
+      height: auto;
+      padding: 8px 0;
       scroll-snap-align: center;
       display: flex;
       align-items: center;
@@ -95,22 +90,18 @@
       width: auto;
       max-width: 95vw;
       height: auto;
-      max-height: 97vh;
+      max-height: calc(100vh - 24px);
       object-fit: contain;
       filter: var(--card-shadow);
       border-radius: 3.5%;
     }
-
   }
-
-  /* Cards with overlay buttons */
   .card-container {
     position: relative;
     width: calc(50% - 12px);
     aspect-ratio: 1200 / 1665;
     cursor: pointer;
   }
-
   .card-container img {
     width: 100%;
     height: 100%;
@@ -119,14 +110,12 @@
     filter: var(--card-shadow);
     border-radius: 3.5%;
   }
-
   .card-container .card-link-bg {
     display: block;
     width: 100%;
     height: 100%;
     position: relative;
   }
-
   .tickets-btn {
     position: absolute;
     left: 12.8%;
@@ -143,29 +132,26 @@
     font-size: 0;
     transition: backdrop-filter 0.2s ease;
   }
-
   .tickets-btn:hover {
     backdrop-filter: brightness(1.12);
     -webkit-backdrop-filter: brightness(1.12);
   }
-
   .btn-workshop-info {
     bottom: 22.6%;
     left: 12.6%;
     width: 73.8%;
   }
-
   .btn-workshop-contact {
     bottom: 7.5%;
     left: 12.6%;
     width: 73.8%;
   }
-
   @media (max-width: 1200px) {
     .card-container {
-      flex: 0 0 97vh;
+      flex: 0 0 auto;
       width: 100vw;
-      height: 97vh;
+      height: auto;
+      padding: 8px 0;
       scroll-snap-align: center;
       display: flex;
       align-items: center;
@@ -183,16 +169,14 @@
       width: auto;
       max-width: 95vw;
       height: auto;
-      max-height: 97vh;
+      max-height: calc(100vh - 24px);
       display: block;
       filter: var(--card-shadow);
     }
     .card-container .tickets-btn {
       position: absolute;
     }
-
   }
-
   @media (min-width: 2001px) {
     .card-grid {
       max-width: 2400px;
@@ -204,8 +188,6 @@
       width: calc(33.333% - 16px);
     }
   }
-
-  /* Landscape grid - triggered by JS .landscape-mode class */
   body.landscape-mode {
     overflow: auto;
     height: auto;
@@ -270,8 +252,6 @@
     width: 100%;
     height: 100%;
   }
-
-  /* Card flip animation */
   .card-flip-container {
     perspective: 1200px;
     display: flex;
@@ -280,7 +260,6 @@
     width: 100%;
     height: 100%;
   }
-
   .card-flip-inner {
     position: relative;
     width: 100%;
@@ -288,11 +267,9 @@
     transition: transform 0.5s ease;
     transform-style: preserve-3d;
   }
-
   .card-flip-inner.flipped {
     transform: rotateY(180deg);
   }
-
   .card-flip-front,
   .card-flip-back {
     position: absolute;
@@ -303,17 +280,14 @@
     backface-visibility: hidden;
     -webkit-backface-visibility: hidden;
   }
-
   .card-flip-front picture {
     display: block;
     width: 100%;
     height: 100%;
   }
-
   .card-flip-back {
     transform: rotateY(180deg);
   }
-
   .card-flip-front img,
   .card-flip-back img {
     width: 100%;
@@ -323,26 +297,33 @@
     border-radius: 3.5%;
     display: block;
   }
-
   @media (max-width: 1200px) {
     .card-flip-front img,
     .card-flip-back img {
       width: auto;
       max-width: 95vw;
       height: auto;
-      max-height: 97vh;
+      max-height: calc(100vh - 24px);
     }
     .card-flip-front picture {
       width: auto;
       height: auto;
     }
   }
-
-
+  .card-scroll-spacer {
+    display: none;
+  }
+  @media (max-width: 1200px) {
+    .card-scroll-spacer {
+      display: block;
+      flex: 0 0 auto;
+      width: 100vw;
+      height: calc(50vh - 8px);
+    }
+  }
   .card-video-flip {
     cursor: pointer;
   }
-
   .video-click-overlay {
     position: absolute;
     top: 15%;
@@ -352,7 +333,6 @@
     z-index: 10;
     cursor: pointer;
   }
-
   .card-flip-back .video-wrapper {
     position: relative;
     width: 100%;
@@ -361,11 +341,6 @@
     border-radius: 3.5%;
     overflow: hidden;
   }
-
-  .scroll-locked {
-    overflow: hidden !important;
-  }
-
 </style>
 <!-- Meta Pixel Code -->
 <script>
@@ -387,6 +362,7 @@ src="https://www.facebook.com/tr?id=1392900462867942&ev=PageView&noscript=1"
 </head>
 <body>
 <div class="card-grid">
+  <div class="card-scroll-spacer"></div>
   <div class="card-link card-video-flip" id="card-video">
     <picture>
       <source media="(max-width: 1200px) and (max-aspect-ratio: 3/5)" srcset="images/card-01_mobile.jpg">
@@ -430,21 +406,19 @@ src="https://www.facebook.com/tr?id=1392900462867942&ev=PageView&noscript=1"
       <a class="tickets-btn btn-workshop-contact" href="mailto:joshua@perfectbeasts.live">Contact</a>
     </div>
   </div>
+  <div class="card-scroll-spacer"></div>
 </div>
 
 <script>
   function isMobile() {
     return window.innerWidth <= 1200 && window.innerHeight > window.innerWidth;
   }
-
   function is916Mode() {
     return window.innerWidth <= 1200 && (window.innerHeight / window.innerWidth) > (5 / 3);
   }
-
   function isDesktop() {
     return window.innerWidth > 1200;
   }
-
   function updateOrientation() {
     if (window.innerWidth <= 1200 && window.innerWidth > window.innerHeight) {
       document.body.classList.add('landscape-mode');
@@ -457,114 +431,75 @@ src="https://www.facebook.com/tr?id=1392900462867942&ev=PageView&noscript=1"
   window.addEventListener('orientationchange', function() {
     setTimeout(updateOrientation, 100);
   });
-
   var grid = document.querySelector('.card-grid');
-
   function setupVideoCard() {
     var videoCard = document.getElementById('card-video');
     if (!videoCard) return;
-
     var picture = videoCard.querySelector('picture');
     var container = picture ? picture.parentElement : videoCard;
-
     var flipContainer = document.createElement('div');
     flipContainer.className = 'card-flip-container';
-
     var flipInner = document.createElement('div');
     flipInner.className = 'card-flip-inner flipped';
-
     var flipFront = document.createElement('div');
     flipFront.className = 'card-flip-front';
-
     var flipBack = document.createElement('div');
     flipBack.className = 'card-flip-back';
-
     var videoWrapper = document.createElement('div');
     videoWrapper.className = 'video-wrapper';
-
     var videoSrc;
     if (is916Mode()) {
       videoSrc = 'https://player.vimeo.com/video/1178912129?h=9f7ede004c&badge=0&autopause=0&player_id=0&app_id=58479&autoplay=1&muted=1&loop=1&title=0&byline=0&portrait=0';
     } else {
       videoSrc = 'https://player.vimeo.com/video/1179435831?badge=0&autopause=0&player_id=0&app_id=58479&autoplay=1&muted=1&loop=1&title=0&byline=0&portrait=0';
     }
-
     var iframe = document.createElement('iframe');
     iframe.src = videoSrc;
     iframe.allow = 'autoplay; fullscreen; picture-in-picture; clipboard-write; encrypted-media; web-share';
     iframe.referrerPolicy = 'strict-origin-when-cross-origin';
     iframe.title = 'PERFECT BEASTS';
     iframe.style.cssText = 'position:absolute;top:0;left:0;width:100%;height:100%;border:none;';
-
     var clickOverlay = document.createElement('div');
     clickOverlay.className = 'video-click-overlay';
-
     videoWrapper.appendChild(iframe);
     videoWrapper.appendChild(clickOverlay);
-
-    if (picture) {
-      flipFront.appendChild(picture);
-    }
-
+    if (picture) { flipFront.appendChild(picture); }
     flipBack.appendChild(videoWrapper);
     flipInner.appendChild(flipFront);
     flipInner.appendChild(flipBack);
     flipContainer.appendChild(flipInner);
     container.appendChild(flipContainer);
-
     function sizeFlip() {
-      if (!isMobile()) {
-        flipContainer.style.width = '';
-        flipContainer.style.height = '';
-        return;
-      }
+      if (!isMobile()) { flipContainer.style.width = ''; flipContainer.style.height = ''; return; }
       var frontImg = flipFront.querySelector('img');
       if (frontImg && frontImg.offsetHeight > 0) {
         flipContainer.style.width = frontImg.offsetWidth + 'px';
         flipContainer.style.height = frontImg.offsetHeight + 'px';
       }
     }
-
     var fImg = flipFront.querySelector('img');
-    if (fImg) {
-      fImg.addEventListener('load', sizeFlip);
-      if (fImg.complete) sizeFlip();
-    }
+    if (fImg) { fImg.addEventListener('load', sizeFlip); if (fImg.complete) sizeFlip(); }
     window.addEventListener('resize', sizeFlip);
-
     var player = new Vimeo.Player(iframe);
-
     videoCard._flipInner = flipInner;
     videoCard._player = player;
-
     var flipLocked = true;
-    setTimeout(function() {
-      flipLocked = false;
-    }, 5000);
-
+    setTimeout(function() { flipLocked = false; }, 5000);
     function flipToVideo() {
       flipInner.classList.add('flipped');
       player.setCurrentTime(0);
       player.play();
     }
-
     function flipToFront() {
       if (flipLocked) return;
       flipInner.classList.remove('flipped');
       player.pause();
       player.setCurrentTime(0);
     }
-
     videoCard._flipToFront = flipToFront;
-
     var touchMoved = false;
-    videoCard.addEventListener('touchstart', function() {
-      touchMoved = false;
-    }, { passive: true });
-    videoCard.addEventListener('touchmove', function() {
-      touchMoved = true;
-    }, { passive: true });
-
+    videoCard.addEventListener('touchstart', function() { touchMoved = false; }, { passive: true });
+    videoCard.addEventListener('touchmove', function() { touchMoved = true; }, { passive: true });
     videoCard.addEventListener('click', function(e) {
       if (touchMoved) return;
       if (e.target.closest('.video-click-overlay')) return;
@@ -574,27 +509,17 @@ src="https://www.facebook.com/tr?id=1392900462867942&ev=PageView&noscript=1"
         flipToVideo();
       }
     });
-
     clickOverlay.addEventListener('click', function(e) {
       e.preventDefault();
       e.stopPropagation();
       flipToFront();
     });
-
-    if (isMobile()) {
-      grid.classList.add('scroll-locked');
-      setTimeout(function() {
-        grid.classList.remove('scroll-locked');
-      }, 5000);
-    }
-
     setTimeout(function() {
       if (flipInner.classList.contains('flipped')) {
         flipLocked = false;
         flipToFront();
       }
     }, 45000);
-
     var scrollObserver = new IntersectionObserver(function(entries) {
       entries.forEach(function(entry) {
         if (!entry.isIntersecting && flipInner.classList.contains('flipped')) {
@@ -602,12 +527,9 @@ src="https://www.facebook.com/tr?id=1392900462867942&ev=PageView&noscript=1"
         }
       });
     }, { threshold: 0.3 });
-
     scrollObserver.observe(videoCard);
   }
-
   setupVideoCard();
-
   document.addEventListener('click', function(e) {
     var videoCard = document.getElementById('card-video');
     if (!videoCard || !videoCard._flipInner) return;
